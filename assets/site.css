@@ -170,3 +170,6 @@ footer.site a{color:var(--muted)}
 .funders img.logo{height:44px;width:auto;max-width:100%}
 footer.site .funders img.logo{height:36px}
 .logo-text{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);padding:8px 12px;border-radius:2px}
+/* each logo sits on the backing its colours were made for, so it reads in light and dark */
+.funders img.logo.on-dark{background:#13151f;padding:8px 12px;border-radius:3px;box-sizing:content-box}
+.funders img.logo.on-light{background:#ffffff;padding:4px 8px;border-radius:3px;box-sizing:content-box}

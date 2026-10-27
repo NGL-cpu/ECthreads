@@ -32,5 +32,5 @@ Rows appear in the order they are listed.
 - `assets/site.css`: the look of every page
 - `assets/site.js`: the menu, footer and spreadsheet lists (edit `NAV` there to change the menu)
 - `images/`: photographs and other media for the archive
-- `images/logos/`: funder logos. Add the official files as `ukri-ahrc.svg` and `university-of-southampton.svg` (PNG works too if you change the file names in `about.html` and `assets/site.js`). Until then the organisations' names show in their place.
+- `images/logos/`: funder logos (`ukri-ahrc.png`, the white UKRI AHRC logo, shown on a dark backing; `university-of-southampton.png`, shown on a white backing)
 - `.nojekyll`: tells GitHub Pages to serve the files exactly as they are

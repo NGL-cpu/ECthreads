@@ -35,9 +35,9 @@ function chrome() {
   if (foot) foot.innerHTML = `
     <div class="gutter"><div class="inner"><footer class="site">
       <div><div class="mark">THREADS</div>Led by Dr L. Gre · <a href="https://studiogre.studio">Studio Gre</a></div>
-      <div class="funders">
-        <img class="logo" src="images/logos/ukri-ahrc.svg" alt="UKRI Arts and Humanities Research Council">
-        <img class="logo" src="images/logos/university-of-southampton.svg" alt="University of Southampton">
+      <div class="funders"><span class="label">Funded by</span>
+        <img class="logo on-dark" src="images/logos/ukri-ahrc.png" alt="UKRI Arts and Humanities Research Council">
+        <img class="logo on-light" src="images/logos/university-of-southampton.png" alt="University of Southampton">
       </div>
     </footer></div></div>`;
 }
