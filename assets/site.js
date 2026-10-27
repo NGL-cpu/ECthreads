@@ -161,12 +161,34 @@ function plates() {
     cv.width = r.width * d; cv.height = r.height * d; g.scale(d, d);
     const w = r.width, h = r.height, gold = css("--gold"), haint = css("--haint"), fg = css("--muted");
     const kind = cv.dataset.plate;
-    if (kind === "voice") {
-      for (let i = 0; i < 90; i++) {
-        const xx = w * .08 + i * (w * .84 / 90), env = Math.sin(i / 90 * Math.PI) ** 1.4;
-        const a = (Math.sin(i * .9) * .5 + Math.sin(i * .23) * .5) * env * h * .32;
-        g.fillStyle = i % 9 === 0 ? gold : haint; g.globalAlpha = .85; g.fillRect(xx, h / 2 - Math.abs(a) - 1, 2, Math.abs(a) * 2 + 2);
+    if (kind === "voice") {           // a fragment of graphic score: held tones, breaths, glissandi, a gold thread through it
+      let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+      const lane = i => h * (.2 + i * .15);
+      g.lineCap = "round";
+      for (let i = 0; i < 18; i++) {                       // held tones
+        const y = lane(Math.floor(rnd() * 5)) + (rnd() - .5) * 8, x0 = w * (.06 + rnd() * .7), len = w * (.05 + rnd() * .16);
+        g.strokeStyle = haint; g.globalAlpha = .55 + rnd() * .35; g.lineWidth = 1.5 + rnd() * 3.5;
+        g.beginPath(); g.moveTo(x0, y); g.lineTo(x0 + len, y); g.stroke();
       }
+      g.lineWidth = 1.4;
+      for (let i = 0; i < 4; i++) {                        // glissandi
+        const x0 = w * (.1 + rnd() * .6), y0 = lane(Math.floor(rnd() * 5)), dx = w * (.1 + rnd() * .12), dy = (rnd() - .5) * h * .35;
+        g.strokeStyle = gold; g.globalAlpha = .85;
+        g.beginPath(); g.moveTo(x0, y0); g.quadraticCurveTo(x0 + dx * .5, y0 + dy * 1.2, x0 + dx, y0 + dy); g.stroke();
+      }
+      for (let i = 0; i < 26; i++) {                       // breaths and touches
+        const x = w * (.05 + rnd() * .9), y = h * (.12 + rnd() * .76), r = 1.4 + rnd() * 2.2;
+        g.globalAlpha = .7; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2);
+        if (rnd() > .55) { g.strokeStyle = fg; g.lineWidth = 1; g.stroke(); } else { g.fillStyle = fg; g.fill(); }
+      }
+      for (let i = 0; i < 3; i++) {                        // fermatas: held silences
+        const x = w * (.2 + i * .28 + rnd() * .05), y = h * .12;
+        g.strokeStyle = fg; g.globalAlpha = .8; g.lineWidth = 1.2;
+        g.beginPath(); g.arc(x, y + 6, 7, Math.PI, 0); g.stroke();
+        g.fillStyle = fg; g.beginPath(); g.arc(x, y + 4, 1.5, 0, Math.PI * 2); g.fill();
+      }
+      g.globalAlpha = 1; g.strokeStyle = gold; g.lineWidth = 1.6; g.beginPath();   // the thread
+      g.moveTo(0, h * .86); g.bezierCurveTo(w * .3, h * .5, w * .55, h * 1.02, w, h * .7); g.stroke();
     } else if (kind === "film") {
       for (let i = 0; i < 5; i++) {
         const fw = w * .16, fx = w * .07 + i * (fw + w * .025), fy = h * .3;
