@@ -193,3 +193,5 @@ footer.site .funders img.logo{height:36px}
 .origin p{margin:8px 0 0;color:var(--fg)}
 .origin a{color:var(--gold)}
 .origin .soon{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haint)}
+.origin .origin-link{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;margin-top:14px}
+.origin .origin-link a{font-weight:500}
