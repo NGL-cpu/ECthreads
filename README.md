@@ -2,7 +2,7 @@
 
 Testimony · Healing · Repair · Embodied Archives · Dreaming · the Sonic (working name)
 
-The public website for a research and composition project on gynaecological racism, sound and the archive, held by the life of Anarcha. Led by Dr L. Gre (Studio Gre), funded by the Arts and Humanities Research Council at the University of Southampton.
+The public website for a research and composition project on gynaecological racism, sound and the archive, held by the life of Anarcha. Led by Dr Nik Gre Lassiter (Studio Gre), funded by the Arts and Humanities Research Council at the University of Southampton.
 
 Plain HTML published with GitHub Pages. There is no build step.
 
