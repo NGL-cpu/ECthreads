@@ -182,3 +182,14 @@ footer.site .funders img.logo{height:36px}
 .doc th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400}
 .doc blockquote{margin:12px 0 18px;padding-left:16px;border-left:2px solid var(--gold);font-family:var(--display);font-style:italic;font-size:19px}
 .doc ol,.doc ul{padding-left:22px}
+/* About: Anarcha given her own weight */
+.anarcha{padding-block:72px 64px}
+.anarcha .name{font-family:var(--display);font-weight:400;font-size:clamp(76px,15vw,200px);line-height:.88;letter-spacing:-.02em;margin:0;max-width:none}
+.anarcha .question{font-family:var(--display);font-style:italic;font-size:clamp(26px,3.6vw,44px);color:var(--gold);margin:14px 0 36px;padding-bottom:22px;border-bottom:1.5px solid var(--gold);max-width:16ch}
+.anarcha-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:860px){.anarcha-body{grid-template-columns:minmax(0,1fr)}}
+.anarcha .prose{font-size:18px;line-height:1.65}
+.origin{background:var(--bg-2);border-left:3px solid var(--gold);border-radius:4px;padding:20px 22px}
+.origin p{margin:8px 0 0;color:var(--fg)}
+.origin a{color:var(--gold)}
+.origin .soon{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haint)}
