@@ -114,16 +114,26 @@ const RENDER = {
       ${r.notes ? paras(r.notes) : ""}${link(r.link, r.link_text || "Details", "more")}</div></li>`).join("")}</ul>`;
   },
   archive(rows) {
-    return `<div class="gallery">${rows.filter(shown).map(r => {
-      const kind = (r.kind || "").toLowerCase(), src = r.file || "";
-      let frame = `<span class="kind">${esc(kind || "item")}</span>`;
-      if (kind === "photo" && src) frame = `<img src="${esc(src)}" alt="${esc(r.alt || r.title)}" loading="lazy">`;
-      const audio = kind === "audio" && src ? `<audio controls preload="none" src="${esc(src)}"></audio>` : "";
-      const open = (kind === "video" || kind === "document") && src ? link(src, kind === "video" ? "Watch" : "Open document", "more") : "";
-      return `<figure class="item"><div class="frame">${frame}</div>${audio}
-        <figcaption><b>${esc(r.title)}</b>${esc([r.date, r.place].filter(Boolean).join(" · "))}
-        ${r.caption ? `<br>${esc(r.caption)}` : ""}${r.credit ? `<span class="credit">${esc(r.credit)}</span>` : ""}${open}</figcaption></figure>`;
-    }).join("")}</div>`;
+    // one photo book per event; covers on a shelf, a reader that opens below, a pop-out for single photographs
+    const items = rows.filter(shown), events = [], byEvent = {};
+    items.forEach(r => { const k = r.event || "Archive"; if (!byEvent[k]) { byEvent[k] = []; events.push(k); } byEvent[k].push(r); });
+    return `<div class="shelf">${events.map((k, i) => {
+      const list = byEvent[k], first = list[0];
+      const cover = list.find(r => yes(r.cover)) || list.find(r => (r.kind || "").toLowerCase() === "photo" && r.file) || first;
+      const photos = list.every(r => (r.kind || "").toLowerCase() === "photo");
+      const count = `${list.length} ${photos ? (list.length === 1 ? "photograph" : "photographs") : (list.length === 1 ? "item" : "items")}`;
+      return `<button class="book" type="button" data-event="${i}" aria-expanded="false" aria-controls="reader">
+        <span class="cover">
+          <span class="leaves" aria-hidden="true"></span>
+          ${cover && cover.file && (cover.kind || "").toLowerCase() === "photo" ? `<img src="${esc(cover.file)}" alt="" loading="lazy">` : ""}
+          <span class="masthead"><span class="issue">No. ${String(i + 1).padStart(2, "0")}</span><span class="mt">${esc(k)}</span></span>
+          <span class="foot">${esc([first.date, first.place].filter(Boolean).join(" · "))}</span>
+        </span>
+        <span class="book-title">${esc(k)}</span><span class="book-meta">${esc(count)} · Open</span>
+      </button>`;
+    }).join("")}</div>
+    <section class="reader" id="reader" hidden aria-live="polite"></section>
+    <dialog class="lightbox" aria-label="Photograph"></dialog>`;
   }
 };
 
@@ -134,11 +144,100 @@ async function fillLists() {
       const rows = await sheet(file || kind);
       const visible = rows.filter(shown);
       el.innerHTML = visible.length ? RENDER[kind](rows, el) : `<div class="empty">${esc(el.dataset.empty || "Nothing here yet.")}</div>`;
+      if (visible.length && AFTER[kind]) AFTER[kind](el, visible);
     } catch (e) {
       el.innerHTML = `<div class="empty">This list couldn’t be loaded. ${esc(e.message)}.</div>`;
     }
   }
 }
+
+
+/* ---------- archive: photo books ---------- */
+const AFTER = {
+  archive(el, items) {
+    const events = [], byEvent = {};
+    items.forEach(r => { const k = r.event || "Archive"; if (!byEvent[k]) { byEvent[k] = []; events.push(k); } byEvent[k].push(r); });
+    const reader = el.querySelector(".reader"), lb = el.querySelector(".lightbox"), books = [...el.querySelectorAll(".book")];
+    const narrow = matchMedia("(max-width: 760px)");
+    let ev = -1, spread = 0, lbIdx = 0;
+    const kindOf = r => (r.kind || "").toLowerCase();
+    const media = (r, i) => {
+      if (kindOf(r) === "photo" && r.file) return `<button class="zoom" type="button" data-idx="${i}" aria-label="View larger: ${esc(r.title)}"><img src="${esc(r.file)}" alt="${esc(r.alt || r.title)}" loading="lazy"></button>`;
+      if (kindOf(r) === "audio" && r.file) return `<div class="ph-other"><span class="kind">audio</span><audio controls preload="none" src="${esc(r.file)}"></audio></div>`;
+      if (r.file) return `<div class="ph-other"><span class="kind">${esc(kindOf(r) || "item")}</span>${link(r.file, kindOf(r) === "video" ? "Watch" : "Open", "more")}</div>`;
+      return `<div class="ph-other"><span class="kind">${esc(kindOf(r) || "item")}</span></div>`;
+    };
+    const credit = r => r.credit ? `<span class="credit">${esc(r.credit)}</span>` : "";
+    function renderReader() {
+      const list = byEvent[events[ev]], per = narrow.matches ? 1 : 2, total = Math.ceil(list.length / per);
+      spread = Math.max(0, Math.min(spread, total - 1));
+      const pages = list.slice(spread * per, spread * per + per);
+      reader.innerHTML = `
+        <div class="reader-head">
+          <div><div class="label">No. ${String(ev + 1).padStart(2, "0")} · ${esc([list[0].date, list[0].place].filter(Boolean).join(" · "))}</div>
+          <h2>${esc(events[ev])}</h2></div>
+          <button class="reader-close" type="button" aria-label="Close this book">Close</button>
+        </div>
+        <div class="spread${per === 1 ? " single" : ""}">
+          ${pages.map((r, j) => { const i = spread * per + j; return `
+            <figure class="bpage"><div class="ph">${media(r, i)}</div>
+              <figcaption><b>${esc(r.title)}</b>${r.caption ? ` ${esc(r.caption)}` : ""}${credit(r)}</figcaption>
+              <span class="folio">${i + 1}</span></figure>`; }).join("")}
+          ${pages.length < per ? `<div class="bpage blank" aria-hidden="true"></div>` : ""}
+        </div>
+        <div class="reader-nav">
+          <button type="button" class="prev" ${spread === 0 ? "disabled" : ""} aria-label="Previous pages">←</button>
+          <span>${per === 1 ? "Page" : "Spread"} ${spread + 1} of ${total}</span>
+          <button type="button" class="next" ${spread >= total - 1 ? "disabled" : ""} aria-label="Next pages">→</button>
+        </div>`;
+      reader.querySelector(".reader-close").onclick = closeBook;
+      reader.querySelector(".prev").onclick = () => { spread--; renderReader(); };
+      reader.querySelector(".next").onclick = () => { spread++; renderReader(); };
+      reader.querySelectorAll(".zoom").forEach(b => b.onclick = () => openLightbox(+b.dataset.idx));
+    }
+    function openBook(i) {
+      if (ev === i && !reader.hidden) { closeBook(); return; }
+      ev = i; spread = 0; reader.hidden = false;
+      books.forEach((b, j) => { b.classList.toggle("open", j === i); b.setAttribute("aria-expanded", String(j === i)); });
+      renderReader();
+      reader.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "start"});
+    }
+    function closeBook() {
+      const was = books[ev]; reader.hidden = true; reader.innerHTML = ""; ev = -1;
+      books.forEach(b => { b.classList.remove("open"); b.setAttribute("aria-expanded", "false"); });
+      if (was) was.focus();
+    }
+    function renderLightbox() {
+      const list = byEvent[events[ev]], r = list[lbIdx];
+      lb.innerHTML = `
+        <button class="lb-close" type="button" aria-label="Close">×</button>
+        <figure>${kindOf(r) === "photo" && r.file ? `<img src="${esc(r.file)}" alt="${esc(r.alt || r.title)}">` : media(r, lbIdx)}
+          <figcaption><b>${esc(r.title)}</b> ${esc([r.date, r.place].filter(Boolean).join(" · "))}${r.caption ? `<br>${esc(r.caption)}` : ""}${credit(r)}</figcaption></figure>
+        <div class="lb-nav"><button type="button" class="lb-prev" aria-label="Previous photograph" ${lbIdx === 0 ? "disabled" : ""}>←</button>
+          <span>${lbIdx + 1} / ${list.length}</span>
+          <button type="button" class="lb-next" aria-label="Next photograph" ${lbIdx >= list.length - 1 ? "disabled" : ""}>→</button></div>`;
+      lb.querySelector(".lb-close").onclick = () => lb.close();
+      lb.querySelector(".lb-prev").onclick = () => step(-1);
+      lb.querySelector(".lb-next").onclick = () => step(1);
+    }
+    function step(d) {
+      const list = byEvent[events[ev]], n = lbIdx + d;
+      if (n < 0 || n >= list.length) return;
+      lbIdx = n; renderLightbox();
+      const per = narrow.matches ? 1 : 2; spread = Math.floor(lbIdx / per); renderReader();
+    }
+    function openLightbox(i) { lbIdx = i; renderLightbox(); lb.showModal ? lb.showModal() : lb.setAttribute("open", ""); }
+    lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
+    lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") step(-1); if (e.key === "ArrowRight") step(1); });
+    reader.addEventListener("keydown", e => {
+      if (e.target.closest("button.zoom")) return;
+      if (e.key === "ArrowLeft") reader.querySelector(".prev")?.click();
+      if (e.key === "ArrowRight") reader.querySelector(".next")?.click();
+    });
+    books.forEach((b, i) => b.addEventListener("click", () => openBook(i)));
+    narrow.addEventListener?.("change", () => { if (ev >= 0) renderReader(); });
+  }
+};
 
 /* ---------- drawings ---------- */
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();

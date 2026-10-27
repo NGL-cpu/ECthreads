@@ -212,3 +212,58 @@ footer.site .funders img.logo{height:36px}
 .associates li a{text-decoration:none}
 .associates li a:hover{color:var(--gold)}
 .associates li span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ---------- Archive: photo books ---------- */
+/* paper stays paper in both themes, like a real book */
+:root{--paper:#f7f3ea;--paper-2:#ece6d8;--paper-ink:#1d1c24;--paper-muted:#6a6572}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:44px 34px;perspective:1400px;padding:8px 0 4px}
+.book{all:unset;cursor:pointer;display:grid;gap:12px;align-content:start}
+.book:focus-visible .cover{outline:2px solid var(--haint);outline-offset:4px}
+.book .cover{position:relative;display:block;aspect-ratio:3/4;border-radius:2px 7px 7px 2px;background:var(--bg-2);transform-origin:left center;transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s;box-shadow:2px 3px 0 -1px var(--paper-2),4px 6px 0 -2px var(--paper),10px 14px 28px rgba(0,0,0,.35)}
+.book .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.book .cover::before{content:"";position:absolute;inset:0 auto 0 0;width:16px;z-index:2;border-radius:2px 0 0 2px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.12) 55%,rgba(0,0,0,0))}
+.book .cover::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(180deg,rgba(10,10,18,.62) 0%,rgba(10,10,18,0) 34%,rgba(10,10,18,0) 66%,rgba(10,10,18,.7) 100%)}
+.book .masthead{position:absolute;z-index:3;top:16px;left:26px;right:16px;display:grid;gap:6px;color:#f7f3ea}
+.book .issue{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.book .mt{font-family:var(--display);font-size:clamp(19px,1.9vw,24px);line-height:1.05;text-transform:uppercase;letter-spacing:.03em;text-wrap:balance;overflow-wrap:anywhere}
+.book .foot{position:absolute;z-index:3;left:26px;right:16px;bottom:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#f7f3ea;opacity:.9}
+.book .book-title{font-family:var(--display);font-size:22px;line-height:1.2}
+.book .book-meta{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haint)}
+.book:hover .cover,.book.open .cover{transform:rotateY(-14deg);box-shadow:2px 3px 0 -1px var(--paper-2),4px 6px 0 -2px var(--paper),18px 18px 34px rgba(0,0,0,.42)}
+.book.open .book-meta{color:var(--gold)}
+
+.reader{margin-top:56px;padding:26px clamp(14px,3vw,30px) 22px;background:var(--bg-2);border-radius:6px;scroll-margin-top:16px}
+.reader-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
+.reader-head h2{margin:4px 0 0;font-size:clamp(28px,3.6vw,42px)}
+.reader-close,.reader-nav button,.lightbox button{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--fg);padding:9px 14px;border-radius:2px;cursor:pointer}
+.reader-close:hover,.reader-nav button:not([disabled]):hover{border-color:var(--gold);color:var(--gold)}
+.reader-nav button[disabled],.lightbox .lb-nav button[disabled]{opacity:.3;cursor:default}
+.spread{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);color:var(--paper-ink);border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.spread.single{grid-template-columns:1fr}
+.bpage{position:relative;margin:0;padding:clamp(16px,2.6vw,30px) clamp(16px,2.6vw,30px) 42px;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:12px;min-height:clamp(320px,46vw,560px);min-width:0}
+.spread:not(.single) .bpage:first-child{box-shadow:inset -22px 0 26px -22px rgba(0,0,0,.32)}
+.spread:not(.single) .bpage:nth-child(2){box-shadow:inset 22px 0 26px -22px rgba(0,0,0,.32)}
+.bpage .ph{display:grid;place-items:center;min-height:0}
+.bpage .zoom{all:unset;cursor:zoom-in;display:block;max-width:100%;max-height:100%}
+.bpage .zoom img{display:block;max-width:100%;max-height:clamp(240px,38vw,470px);width:auto;height:auto;margin:0 auto;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.bpage .zoom:focus-visible{outline:2px solid #23727a;outline-offset:4px}
+.bpage figcaption{font-family:var(--display);font-size:16px;line-height:1.4;color:var(--paper-ink)}
+.bpage figcaption b{font-weight:600}
+.bpage .credit,.lightbox .credit{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--paper-muted);margin-top:4px}
+.bpage .folio{position:absolute;bottom:14px;font-family:var(--mono);font-size:11px;color:var(--paper-muted)}
+.spread:not(.single) .bpage:first-child .folio{left:clamp(16px,2.6vw,30px)}
+.spread:not(.single) .bpage:nth-child(2) .folio,.spread.single .bpage .folio{right:clamp(16px,2.6vw,30px)}
+.bpage.blank{background:repeating-linear-gradient(0deg,transparent 0 22px,rgba(0,0,0,.025) 22px 23px)}
+.ph-other{display:grid;gap:10px;place-items:center;color:var(--paper-muted)}
+.ph-other .kind{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.reader-nav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+.lightbox{border:none;padding:18px 18px 14px;max-width:min(1120px,90vw);max-height:90vh;background:var(--paper);color:var(--paper-ink);border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:auto}
+.lightbox::backdrop{background:rgba(8,9,16,.72)}
+.lightbox figure{margin:0}
+.lightbox img{display:block;max-width:min(1080px,86vw);max-height:72vh;width:auto;height:auto;margin:0 auto}
+.lightbox figcaption{font-family:var(--display);font-size:16px;line-height:1.4;margin-top:12px;max-width:72ch}
+.lightbox .lb-nav{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--paper-muted)}
+.lightbox button{color:var(--paper-ink);border-color:rgba(0,0,0,.2)}
+.lightbox .lb-close{position:absolute;top:10px;right:10px;font-size:18px;line-height:1;padding:6px 10px;background:var(--paper)}
+@media (prefers-reduced-motion: reduce){.book .cover{transition:none}.book:hover .cover,.book.open .cover{transform:none}}
