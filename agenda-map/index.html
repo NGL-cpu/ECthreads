@@ -164,7 +164,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
     <div class="eyebrow" id="eyebrow">Listening Across · Research agenda map</div>
     <h1 id="title">Where the questions <em>live</em></h1>
     <p id="intro">Loading the map…</p>
-    <a class="jump" href="#how-to-read">How to read this map ↓</a>
+    <a class="jump" href="how-to-read.html">How to read this map →</a>
   </header>
 
   <div class="status" id="status" hidden></div>
@@ -182,44 +182,6 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
       <div class="legend" id="legend"></div>
     </div>
     <aside class="panel" id="panel" aria-live="polite"></aside>
-  </div>
-
-  <div class="guide" id="how-to-read">
-    <section>
-      <h2>How to read this map</h2>
-      <p>At the centre is the question the symposium set out to test: <em>if, when and how</em> could Endarkened Co-Composition work in clinical research across gynaecology, obstetrics and reproductive justice? Every other mark on the map is a way into that question.</p>
-      <h3>Where a question sits</h3>
-      <ul>
-        <li><strong>The four quarters are sites,</strong> the places the research would actually happen: the <strong>clinic</strong> (hospitals, surgeries, maternity wards), the <strong>community</strong> (organisations, homes, advocacy), <strong>archive and memory</strong> (history, story, speculation) and the <strong>academy</strong> (universities, training, research culture).</li>
-        <li><strong>A question on or near a dividing line</strong> belongs to both sites. Trust in migrant maternity care, for example, lives between the clinic and the community.</li>
-        <li><strong>The inner ring</strong> holds questions about Endarkened Co-Composition itself, about data, time, audience and ethics. Every site depends on them, so they sit closest to the centre.</li>
-        <li><strong>The rim</strong> holds tensions: places where we disagreed, or where the method meets resistance.</li>
-        <li><strong>The outer orbit</strong> holds tangents: ideas, histories and practices raised on the day that aren’t research questions but shouldn’t be lost.</li>
-      </ul>
-      <h3>What the marks mean</h3>
-      <div id="guide-key"></div>
-      <h3>What the lines mean</h3>
-      <ul>
-        <li><strong>Solid lines</strong> join questions that share a concern. Select a question to read why.</li>
-        <li><strong>Gold dotted lines</strong> run from a tension to the questions it pulls on.</li>
-        <li><strong>Lilac dashed lines</strong> tie a tangent to the questions it speaks to.</li>
-      </ul>
-      <p>Position is not a ranking. Nearness to the centre says what kind of question it is, not how important it is. A question with many lines is one that many others lean on, which often makes it a good anchor for a study.</p>
-    </section>
-    <section>
-      <h2>Using the map</h2>
-      <ol>
-        <li><strong>Select any mark</strong> (click, tap, or press Tab then Enter) to open its card. Everything not connected to it fades back, so you can follow one thread at a time.</li>
-        <li><strong>Read the card.</strong> Each card gives the full question, where it would run, what Endarkened Co-Composition adds, what it would need on paper (ethics, funding, evidence), who it needs, and its risks. Gaps are marked “still to develop”.</li>
-        <li><strong>Follow a connection</strong> by selecting it in the card’s “Connected to” list.</li>
-        <li><strong>Switch layers</strong> on and off with the Connections, Tensions and Tangents boxes above the map.</li>
-        <li><strong>Select a contributor’s initials</strong> to outline everything they raised. Select them again to clear.</li>
-        <li><strong>Select the centre</strong> to return to the overview.</li>
-        <li><strong>On a phone,</strong> or if you’d rather read than look, use the list below the map. It holds every card, grouped by site.</li>
-      </ol>
-      <h3>What this map is, and isn’t</h3>
-      <p>It is a working record of a collective conversation, drawn from the symposium’s Padlets and transcripts. It is not a finished agenda, a ranking, or a set of commitments. Questions that emerged in discussion are worded from the transcript and stay provisional until the people who raised them confirm the wording. The map will change as co-authors add, refine and refuse.</p>
-    </section>
   </div>
 
   <h2 class="sectionhead">Every card, by site</h2>
@@ -546,17 +508,17 @@ const KEY = [
 ];
 function drawLegend() {
   const lg = document.getElementById("legend"); lg.innerHTML = "";
-  const gk = document.getElementById("guide-key"); gk.innerHTML = "";
+  const gk = document.getElementById("guide-key"); if (gk) gk.innerHTML = "";
   KEY.forEach(([t, name, desc]) => {
     const span = document.createElement("span"); span.appendChild(legendSwatch(t)); span.appendChild(document.createTextNode(name)); lg.appendChild(span);
     const row = document.createElement("div"); row.className = "key";
     const sw = document.createElement("div"); sw.appendChild(legendSwatch(t));
     const tx = document.createElement("div"); tx.innerHTML = `<strong>${esc(name)}.</strong> ${esc(desc)}`;
-    row.append(sw, tx); gk.appendChild(row);
+    row.append(sw, tx); if (gk) gk.appendChild(row);
   });
   const ringRow = document.createElement("div"); ringRow.className = "key";
   ringRow.innerHTML = `<div></div><div><strong>Smaller marks on the inner ring</strong> are questions about Endarkened Co-Composition itself. They use the same fills as above.</div>`;
-  gk.appendChild(ringRow);
+  if (gk) gk.appendChild(ringRow);
 }
 
 function drawPeople() {
@@ -647,7 +609,7 @@ function overview() {
   <dl>
    <div><dt>On the map</dt><dd>${placed} questions placed by site and ${ring} about Endarkened Co-Composition itself, of which ${count(n => n.type === "discussion")} emerged in discussion. ${count(n => n.type === "tension")} tensions and ${count(n => n.type === "tangent")} tangents.</dd></div>
    ${most}
-   <div><dt>Start here</dt><dd>Select any mark to open its card. “How to read this map”, below, explains the layout.</dd></div>
+   <div><dt>Start here</dt><dd>Select any mark to open its card. <a href="how-to-read.html">How to read this map</a></dd></div>
   </dl>
   ${SET.centre_note ? `<p class="note">${esc(SET.centre_note)}</p>` : ""}`;
 }

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to Read the Agenda Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: circle-and-cross field (after the symposium's cosmogram walk). EC at the centre, a method ring around it,
+   four sites as quadrants, tensions on the rim, tangents in orbit. Detail panel beside on desktop, below on phones. */
+:root{
+  --bg:#171a2b; --surface:#1f2339; --surface-2:#262b45; --fg:#ece8dd; --muted:#a3a7bb; --line:#3b4162;
+  --accent:#9fd3d0; --accent-ink:#0f2a2b; --gold:#dcb75e; --tangent:#b9a8de; --warn:#f0a07a;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
+  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
+  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1500px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header{display:grid;gap:10px;max-width:880px;margin-bottom:22px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:0;text-wrap:balance}
+h1 em{color:var(--accent)}
+header p{margin:0;color:var(--muted);max-width:68ch}
+.jump{font-size:13px;color:var(--accent)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:8px 0 14px}
+.toggle{display:inline-flex;gap:8px;align-items:center;font-size:13px;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--accent);width:16px;height:16px}
+.sw{display:inline-block;width:26px;height:0;border-top:2px solid var(--muted)}
+.sw.t{border-top:2px dashed var(--tangent)} .sw.x{border-top:2px dotted var(--gold)} .sw.c{border-top:2px solid var(--accent)}
+.people{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.people span.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip:focus-visible,.node:focus-visible,.li:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
+@media (max-width:1080px){.stage{grid-template-columns:minmax(0,1fr)}}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;min-width:0}
+#map{display:block;width:100%;height:auto;min-width:640px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;position:sticky;top:calc(env(safe-area-inset-top, 0px) + 12px);max-height:calc(100vh - 24px);overflow:auto;min-width:0}
+@media (max-width:1080px){.panel{position:static;max-height:none}}
+.panel .kind{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{border-radius:999px;padding:1px 8px;border:1px solid var(--line)}
+.pill.em{border-style:dashed} .pill.x{color:var(--gold);border-color:var(--gold)} .pill.t{color:var(--tangent);border-color:var(--tangent)}
+.panel h2{font-family:var(--display);font-weight:600;font-size:24px;line-height:1.2;margin:8px 0 10px;text-wrap:balance}
+.panel .q{font-family:var(--display);font-style:italic;font-size:18px;line-height:1.4;margin:0 0 14px}
+.panel dl{display:grid;gap:10px;margin:0 0 14px}
+.panel dt{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.panel dd{margin:2px 0 0;white-space:pre-line}
+.panel .todo{color:var(--muted);font-style:italic}
+.panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;font-weight:500}
+.links{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.links button{all:unset;cursor:pointer;display:block;padding:6px 8px;border-radius:6px;background:var(--surface-2);font-size:14px}
+.links button small{display:block;color:var(--muted);font-size:12px}
+.links button:hover{outline:1px solid var(--accent)}
+.note{font-size:13px;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px;margin:12px 0 0}
+.id{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* svg */
+.rim{fill:none;stroke:var(--line);stroke-width:1.2}
+.cross{stroke:var(--line);stroke-width:1;stroke-dasharray:2 6}
+.quad{font-family:var(--display);font-size:34px;fill:var(--muted);opacity:.8}
+.quadsub{font-family:var(--mono);font-size:11px;fill:var(--muted);opacity:.75;letter-spacing:.06em}
+.edge{fill:none;stroke-width:1.2;transition:opacity .2s,stroke .2s}
+.edge.link{stroke:var(--muted);opacity:.45}
+.edge.spoke{stroke:var(--line);opacity:.8}
+.edge.tangent{stroke:var(--tangent);stroke-dasharray:5 5;opacity:.55}
+.edge.tension{stroke:var(--gold);stroke-dasharray:1.5 4;opacity:.6}
+.edge.hot{opacity:1;stroke-width:2.2}
+.edge.link.hot,.edge.spoke.hot{stroke:var(--accent)}
+.node{cursor:pointer;transition:opacity .2s}
+.node .shape{stroke-width:2}
+.n-padlet .shape{fill:var(--accent);stroke:var(--accent)}
+.n-discussion .shape{fill:var(--surface);stroke:var(--accent);stroke-dasharray:3 2.5}
+.n-seed .shape{fill:var(--surface);stroke:var(--accent)}
+.n-project .shape{fill:var(--gold);stroke:var(--gold)}
+.n-tangent .shape{fill:var(--surface);stroke:var(--tangent);stroke-dasharray:3 2}
+.n-tension .shape{fill:var(--gold);stroke:var(--gold)}
+.n-centre .shape{fill:var(--accent);stroke:none}
+.halo{fill:none;stroke:var(--gold);stroke-width:2.5;opacity:0}
+.node.sel .halo{opacity:1}
+.label{font-family:var(--body);font-size:13px;fill:var(--fg);font-weight:500}
+.ring .label{font-size:12.5px}
+.n-tangent .label{font-size:12px;font-style:italic;fill:var(--tangent);font-weight:400}
+.n-tension .label{font-size:12px;fill:var(--gold);font-weight:500}
+.n-centre .label{font-family:var(--display);font-size:12.5px;fill:var(--accent-ink);font-weight:600}
+.n-centre .sub{font-family:var(--mono);font-size:8.5px;fill:var(--accent-ink)}
+.who{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+.dim{opacity:.16}
+.edge.dim{opacity:.05}
+.node.match .shape{stroke:var(--gold);stroke-width:3}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:var(--muted);padding:12px 16px;border-top:1px solid var(--line)}
+.legend svg{display:inline-block;vertical-align:middle;margin-right:6px}
+
+/* reading guide */
+.guide{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px}
+.guide section{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;min-width:0}
+.guide h2{font-family:var(--display);font-weight:400;font-size:26px;margin:0 0 10px}
+.guide h3{font-size:15px;margin:16px 0 4px}
+.guide p,.guide li{max-width:68ch}
+.guide ul,.guide ol{padding-left:20px;margin:6px 0}
+.guide li{margin:4px 0}
+.key{display:grid;grid-template-columns:28px 1fr;gap:8px 10px;align-items:start;margin:8px 0}
+.key svg{margin-top:2px}
+
+/* list */
+.index{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.index section{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.index h2{font-family:var(--display);font-weight:400;font-size:22px;margin:0 0 4px}
+.index p.sub{margin:0 0 10px;color:var(--muted);font-size:13px}
+.index ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.li{all:unset;cursor:pointer;display:grid;grid-template-columns:14px 1fr;gap:8px;align-items:start;padding:5px 6px;border-radius:6px;font-size:14px}
+.li:hover{background:var(--surface-2)}
+.li i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);display:block}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:6px;border:2px solid var(--accent)}
+.dot.padlet{background:var(--accent)} .dot.discussion{border-style:dashed} .dot.project{background:var(--gold);border-color:var(--gold)}
+.dot.tangent{border-color:var(--tangent);border-style:dashed;width:8px;height:8px}
+.dot.tension{background:var(--gold);border-color:var(--gold);border-radius:1px;transform:rotate(45deg);width:9px;height:9px}
+.sectionhead{font-family:var(--display);font-weight:400;font-size:30px;margin:40px 0 0}
+
+/* editor tools */
+.editor{margin-top:34px;border:1px dashed var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+.editor summary{cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.drop{margin-top:12px;border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted)}
+.drop.over{border-color:var(--accent);color:var(--fg)}
+.problems{margin-top:12px;color:var(--warn)}
+.problems ul{margin:6px 0;padding-left:20px}
+.status{background:var(--surface);border:1px solid var(--warn);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+.status[hidden]{display:none}
+footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
+@media (prefers-reduced-motion: reduce){.edge,.node{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="jump" href="index.html">← Back to the map</a>
+    <div class="eyebrow">Listening Across · Research agenda map</div>
+    <h1>How to read <em>this map</em></h1>
+  </header>
+  <div class="guide" id="how-to-read" style="margin-top:8px">
+    <section>
+      <h2>Reading the map</h2>
+      <p>At the centre is the question the symposium set out to test: <em>if, when and how</em> could Endarkened Co-Composition work in clinical research across gynaecology, obstetrics and reproductive justice? Every other mark on the map is a way into that question.</p>
+      <h3>Where a question sits</h3>
+      <ul>
+        <li><strong>The four quarters are sites,</strong> the places the research would actually happen: the <strong>clinic</strong> (hospitals, surgeries, maternity wards), the <strong>community</strong> (organisations, homes, advocacy), <strong>archive and memory</strong> (history, story, speculation) and the <strong>academy</strong> (universities, training, research culture).</li>
+        <li><strong>A question on or near a dividing line</strong> belongs to both sites. Trust in migrant maternity care, for example, lives between the clinic and the community.</li>
+        <li><strong>The inner ring</strong> holds questions about Endarkened Co-Composition itself, about data, time, audience and ethics. Every site depends on them, so they sit closest to the centre.</li>
+        <li><strong>The rim</strong> holds tensions: places where we disagreed, or where the method meets resistance.</li>
+        <li><strong>The outer orbit</strong> holds tangents: ideas, histories and practices raised on the day that aren’t research questions but shouldn’t be lost.</li>
+      </ul>
+      <h3>What the marks mean</h3>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-padlet"><circle cx="9" cy="9" r="6.5" class="shape" stroke-width="2"/></g></svg><div><strong>Padlet card.</strong> A question posted by a participant on the research-agenda Padlet.</div></div>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-discussion"><circle cx="9" cy="9" r="6.5" class="shape" stroke-width="2"/></g></svg><div><strong>Emerged in discussion.</strong> A question raised aloud on the day and worded from the transcript. Provisional until its contributors confirm it.</div></div>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-seed"><circle cx="9" cy="9" r="6.5" class="shape" stroke-width="2"/></g></svg><div><strong>Seed example.</strong> The worked example used to show how a card is filled in. Open to correction.</div></div>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-project"><circle cx="9" cy="9" r="6.5" class="shape" stroke-width="2"/><circle cx="9" cy="9" r="8.3" fill="none" stroke="var(--gold)" stroke-width="1"/></g></svg><div><strong>Project strand.</strong> A question already being pursued within the project.</div></div>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-tension"><rect x="4" y="4" width="10" height="10" transform="rotate(45 9 9)" class="shape"/></g></svg><div><strong>Tension.</strong> A disagreement, uncertainty or pressure on the method. Sits on the rim.</div></div>
+      <div class="key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><g class="n-tangent"><circle cx="9" cy="9" r="5" class="shape" stroke-width="2"/></g></svg><div><strong>Tangent.</strong> An idea, history or practice worth keeping that isn’t itself a research question. Orbits outside.</div></div>
+      <div class="key"><div></div><div><strong>Smaller marks on the inner ring</strong> are questions about Endarkened Co-Composition itself. They use the same fills as above.</div></div>
+      <h3>What the lines mean</h3>
+      <ul>
+        <li><strong>Solid lines</strong> join questions that share a concern. Select a question to read why.</li>
+        <li><strong>Gold dotted lines</strong> run from a tension to the questions it pulls on.</li>
+        <li><strong>Lilac dashed lines</strong> tie a tangent to the questions it speaks to.</li>
+      </ul>
+      <p>Position is not a ranking. Nearness to the centre says what kind of question it is, not how important it is. A question with many lines is one that many others lean on, which often makes it a good anchor for a study.</p>
+    </section>
+    <section>
+      <h2>Using the map</h2>
+      <ol>
+        <li><strong>Select any mark</strong> (click, tap, or press Tab then Enter) to open its card. Everything not connected to it fades back, so you can follow one thread at a time.</li>
+        <li><strong>Read the card.</strong> Each card gives the full question, where it would run, what Endarkened Co-Composition adds, what it would need on paper (ethics, funding, evidence), who it needs, and its risks. Gaps are marked “still to develop”.</li>
+        <li><strong>Follow a connection</strong> by selecting it in the card’s “Connected to” list.</li>
+        <li><strong>Switch layers</strong> on and off with the Connections, Tensions and Tangents boxes above the map.</li>
+        <li><strong>Select a contributor’s initials</strong> to outline everything they raised. Select them again to clear.</li>
+        <li><strong>Select the centre</strong> to return to the overview.</li>
+        <li><strong>On a phone,</strong> or if you’d rather read than look, use the list under the map. It holds every card, grouped by site.</li>
+      </ol>
+      <h3>What this map is, and isn’t</h3>
+      <p>It is a working record of a collective conversation, drawn from the symposium’s Padlets and transcripts. It is not a finished agenda, a ranking, or a set of commitments. Questions that emerged in discussion are worded from the transcript and stay provisional until the people who raised them confirm the wording. The map will change as co-authors add, refine and refuse.</p>
+    </section>
+  </div>
+
+
+  <p style="margin-top:28px"><a class="jump" href="index.html">← Back to the map</a></p>
+</div>
+</body>
+</html>
