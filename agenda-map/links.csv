@@ -1,0 +1,72 @@
+from,to,why
+Q1,Q2,"What people choose to share, and what gets recorded"
+Q1,Q6,The record and the scan versus the patient’s own account
+Q1,M1,Hesitation and silence treated as data
+Q2,Q3,"Mary’s two streams: the whole story, and loss carried into the next pregnancy"
+Q2,Q12,"Trust and access: access to what, and on whose terms"
+Q2,Q13,From the whole story to something policymakers can use
+Q3,Q13,Bereaved families’ testimony as evidence
+Q4,Q5,Sound in the places people give birth
+Q4,Q6,"Agency inside medicalised, technological spaces"
+Q7,Q8,"Training, and the clinicians who stay"
+Q7,Q9,Medical humanities beyond the add-on
+Q7,Q10,Bringing lived experience into medical knowledge-making
+Q9,Q10,Where arts methods sit in the research cycle
+Q10,M4,Co-production used lightly in medicine
+Q11,Q15,Speculative recollection: the Alabama retreat
+Q11,Q14,Storytelling traditions and collective memory
+Q11,M5,Time and relationship in recollection
+Q11,M2,Co-presence and storytelling
+Q12,Q14,Resisting deficit framings of African and Black knowledge
+Q13,M1,Numbers and stories together
+Q13,M3,Policymakers and clinicians as the audience
+Q15,M3,Who the opera reaches
+M2,M5,Anthropology’s time and trust
+M4,M5,Depth as a safeguard against tokenism
+T1,Q4,Sound in a clinical ward
+T1,Q5,When a space doesn’t want music
+T7,Q4,"Sound, care and the womb"
+T7,Q14,Cultural traditions of care across generations
+T12,Q2,Who gets called hard to reach
+T8,M3,Modular forms reach different audiences
+T8,Q15,Forms the opera could take
+T9,Q14,What colonial archives erased
+T9,M1,Archival absence as data
+T2,M5,Trust and silence in closed settings
+T10,M1,Making rigour legible
+T5,Q9,The method as pedagogy
+T11,Q8,"Arts, culture and retention"
+T11,M3,Who sits in the opera audience
+T4,Q7,Medical students meeting uncertainty
+T3,Q10,Medical authority in the research cycle
+T3,Q7,Medical authority in training
+T13,Q1,Hesitation as sonic information
+T13,Q15,How interviews shape the music
+T6,Q6,Technology that misreads bodies
+T6,Q1,What the scan makes legible
+X10,Q6,
+X10,Q2,
+X2,Q7,
+X2,Q1,
+X2,Q6,
+X8,CENTRE,
+X8,M3,
+X3,Q9,
+X3,Q7,
+X3,Q10,
+X4,Q8,
+X4,Q7,
+X5,M1,
+X5,Q10,
+X5,T10,
+X9,M4,
+X9,Q10,
+X6,M5,
+X6,Q11,
+X6,Q15,
+X7,Q2,
+X7,Q1,
+X1,Q2,
+X1,Q3,
+X1,Q13,
+X1,M1,

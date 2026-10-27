@@ -31,6 +31,7 @@ Rows appear in the order they are listed.
 - `index.html` and the other `.html` files: the pages
 - `assets/site.css`: the look of every page
 - `assets/site.js`: the menu, footer and spreadsheet lists (edit `NAV` there to change the menu)
+- `agenda-map/`: the interactive Listening Across research agenda map. It has its own spreadsheets (`cards.csv`, `links.csv`, `people.csv`, `settings.csv`) and lays itself out from them; see the guide “Updating the Agenda Map”
 - `images/`: photographs and other media for the archive
 - `images/logos/`: funder logos (`ukri-ahrc.png`, the white UKRI AHRC logo, shown on a dark backing; `university-of-southampton.png`, shown on a white backing)
 - `.nojekyll`: tells GitHub Pages to serve the files exactly as they are

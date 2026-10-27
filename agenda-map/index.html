@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Listening Across Agenda Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!--
+  LISTENING ACROSS: RESEARCH AGENDA MAP
+  You should not need to edit this file. Everything on the map comes from four
+  spreadsheets in the same folder:
+    cards.csv     one row per question, tension or tangent
+    links.csv     one row per line drawn between two cards
+    people.csv    initials and full names of contributors
+    settings.csv  the page heading, introduction, centre text and footer
+  Positions are worked out automatically from each card's site and links.
+  See "Updating the Agenda Map" (the Word guide) for step-by-step instructions.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: circle-and-cross field (after the symposium's cosmogram walk). EC at the centre, a method ring around it,
+   four sites as quadrants, tensions on the rim, tangents in orbit. Detail panel beside on desktop, below on phones. */
+:root{
+  --bg:#171a2b; --surface:#1f2339; --surface-2:#262b45; --fg:#ece8dd; --muted:#a3a7bb; --line:#3b4162;
+  --accent:#9fd3d0; --accent-ink:#0f2a2b; --gold:#dcb75e; --tangent:#b9a8de; --warn:#f0a07a;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"Public Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
+  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
+  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1500px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header{display:grid;gap:10px;max-width:880px;margin-bottom:22px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:0;text-wrap:balance}
+h1 em{color:var(--accent)}
+header p{margin:0;color:var(--muted);max-width:68ch}
+.jump{font-size:13px;color:var(--accent)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:8px 0 14px}
+.toggle{display:inline-flex;gap:8px;align-items:center;font-size:13px;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--accent);width:16px;height:16px}
+.sw{display:inline-block;width:26px;height:0;border-top:2px solid var(--muted)}
+.sw.t{border-top:2px dashed var(--tangent)} .sw.x{border-top:2px dotted var(--gold)} .sw.c{border-top:2px solid var(--accent)}
+.people{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.people span.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip:focus-visible,.node:focus-visible,.li:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
+@media (max-width:1080px){.stage{grid-template-columns:minmax(0,1fr)}}
+.mapbox{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto;min-width:0}
+#map{display:block;width:100%;height:auto;min-width:640px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;position:sticky;top:calc(env(safe-area-inset-top, 0px) + 12px);max-height:calc(100vh - 24px);overflow:auto;min-width:0}
+@media (max-width:1080px){.panel{position:static;max-height:none}}
+.panel .kind{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{border-radius:999px;padding:1px 8px;border:1px solid var(--line)}
+.pill.em{border-style:dashed} .pill.x{color:var(--gold);border-color:var(--gold)} .pill.t{color:var(--tangent);border-color:var(--tangent)}
+.panel h2{font-family:var(--display);font-weight:600;font-size:24px;line-height:1.2;margin:8px 0 10px;text-wrap:balance}
+.panel .q{font-family:var(--display);font-style:italic;font-size:18px;line-height:1.4;margin:0 0 14px}
+.panel dl{display:grid;gap:10px;margin:0 0 14px}
+.panel dt{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.panel dd{margin:2px 0 0;white-space:pre-line}
+.panel .todo{color:var(--muted);font-style:italic}
+.panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;font-weight:500}
+.links{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.links button{all:unset;cursor:pointer;display:block;padding:6px 8px;border-radius:6px;background:var(--surface-2);font-size:14px}
+.links button small{display:block;color:var(--muted);font-size:12px}
+.links button:hover{outline:1px solid var(--accent)}
+.note{font-size:13px;color:var(--muted);border-left:2px solid var(--gold);padding-left:10px;margin:12px 0 0}
+.id{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* svg */
+.rim{fill:none;stroke:var(--line);stroke-width:1.2}
+.cross{stroke:var(--line);stroke-width:1;stroke-dasharray:2 6}
+.quad{font-family:var(--display);font-size:34px;fill:var(--muted);opacity:.8}
+.quadsub{font-family:var(--mono);font-size:11px;fill:var(--muted);opacity:.75;letter-spacing:.06em}
+.edge{fill:none;stroke-width:1.2;transition:opacity .2s,stroke .2s}
+.edge.link{stroke:var(--muted);opacity:.45}
+.edge.spoke{stroke:var(--line);opacity:.8}
+.edge.tangent{stroke:var(--tangent);stroke-dasharray:5 5;opacity:.55}
+.edge.tension{stroke:var(--gold);stroke-dasharray:1.5 4;opacity:.6}
+.edge.hot{opacity:1;stroke-width:2.2}
+.edge.link.hot,.edge.spoke.hot{stroke:var(--accent)}
+.node{cursor:pointer;transition:opacity .2s}
+.node .shape{stroke-width:2}
+.n-padlet .shape{fill:var(--accent);stroke:var(--accent)}
+.n-discussion .shape{fill:var(--surface);stroke:var(--accent);stroke-dasharray:3 2.5}
+.n-seed .shape{fill:var(--surface);stroke:var(--accent)}
+.n-project .shape{fill:var(--gold);stroke:var(--gold)}
+.n-tangent .shape{fill:var(--surface);stroke:var(--tangent);stroke-dasharray:3 2}
+.n-tension .shape{fill:var(--gold);stroke:var(--gold)}
+.n-centre .shape{fill:var(--accent);stroke:none}
+.halo{fill:none;stroke:var(--gold);stroke-width:2.5;opacity:0}
+.node.sel .halo{opacity:1}
+.label{font-family:var(--body);font-size:13px;fill:var(--fg);font-weight:500}
+.ring .label{font-size:12.5px}
+.n-tangent .label{font-size:12px;font-style:italic;fill:var(--tangent);font-weight:400}
+.n-tension .label{font-size:12px;fill:var(--gold);font-weight:500}
+.n-centre .label{font-family:var(--display);font-size:12.5px;fill:var(--accent-ink);font-weight:600}
+.n-centre .sub{font-family:var(--mono);font-size:8.5px;fill:var(--accent-ink)}
+.who{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+.dim{opacity:.16}
+.edge.dim{opacity:.05}
+.node.match .shape{stroke:var(--gold);stroke-width:3}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:var(--muted);padding:12px 16px;border-top:1px solid var(--line)}
+.legend svg{display:inline-block;vertical-align:middle;margin-right:6px}
+
+/* reading guide */
+.guide{margin-top:34px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px}
+.guide section{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;min-width:0}
+.guide h2{font-family:var(--display);font-weight:400;font-size:26px;margin:0 0 10px}
+.guide h3{font-size:15px;margin:16px 0 4px}
+.guide p,.guide li{max-width:68ch}
+.guide ul,.guide ol{padding-left:20px;margin:6px 0}
+.guide li{margin:4px 0}
+.key{display:grid;grid-template-columns:28px 1fr;gap:8px 10px;align-items:start;margin:8px 0}
+.key svg{margin-top:2px}
+
+/* list */
+.index{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.index section{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.index h2{font-family:var(--display);font-weight:400;font-size:22px;margin:0 0 4px}
+.index p.sub{margin:0 0 10px;color:var(--muted);font-size:13px}
+.index ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.li{all:unset;cursor:pointer;display:grid;grid-template-columns:14px 1fr;gap:8px;align-items:start;padding:5px 6px;border-radius:6px;font-size:14px}
+.li:hover{background:var(--surface-2)}
+.li i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);display:block}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:6px;border:2px solid var(--accent)}
+.dot.padlet{background:var(--accent)} .dot.discussion{border-style:dashed} .dot.project{background:var(--gold);border-color:var(--gold)}
+.dot.tangent{border-color:var(--tangent);border-style:dashed;width:8px;height:8px}
+.dot.tension{background:var(--gold);border-color:var(--gold);border-radius:1px;transform:rotate(45deg);width:9px;height:9px}
+.sectionhead{font-family:var(--display);font-weight:400;font-size:30px;margin:40px 0 0}
+
+/* editor tools */
+.editor{margin-top:34px;border:1px dashed var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+.editor summary{cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.drop{margin-top:12px;border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;color:var(--muted)}
+.drop.over{border-color:var(--accent);color:var(--fg)}
+.problems{margin-top:12px;color:var(--warn)}
+.problems ul{margin:6px 0;padding-left:20px}
+.status{background:var(--surface);border:1px solid var(--warn);border-radius:10px;padding:16px 18px;margin-bottom:18px}
+.status[hidden]{display:none}
+footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
+@media (prefers-reduced-motion: reduce){.edge,.node{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="jump" href="../listening-across.html">← Listening Across</a>
+    <div class="eyebrow" id="eyebrow">Listening Across · Research agenda map</div>
+    <h1 id="title">Where the questions <em>live</em></h1>
+    <p id="intro">Loading the map…</p>
+    <a class="jump" href="#how-to-read">How to read this map ↓</a>
+  </header>
+
+  <div class="status" id="status" hidden></div>
+
+  <div class="controls" role="group" aria-label="Map layers and filters">
+    <label class="toggle"><input type="checkbox" id="tg-link" checked><span class="sw c"></span>Connections</label>
+    <label class="toggle"><input type="checkbox" id="tg-tension" checked><span class="sw x"></span>Tensions</label>
+    <label class="toggle"><input type="checkbox" id="tg-tangent" checked><span class="sw t"></span>Tangents</label>
+    <div class="people" id="people"><span class="lbl">Contributed by</span></div>
+  </div>
+
+  <div class="stage">
+    <div class="mapbox">
+      <svg id="map" viewBox="0 0 1440 1220" role="img" aria-label="Research agenda map: questions arranged around Endarkened Co-Composition by site"></svg>
+      <div class="legend" id="legend"></div>
+    </div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+
+  <div class="guide" id="how-to-read">
+    <section>
+      <h2>How to read this map</h2>
+      <p>At the centre is the question the symposium set out to test: <em>if, when and how</em> could Endarkened Co-Composition work in clinical research across gynaecology, obstetrics and reproductive justice? Every other mark on the map is a way into that question.</p>
+      <h3>Where a question sits</h3>
+      <ul>
+        <li><strong>The four quarters are sites,</strong> the places the research would actually happen: the <strong>clinic</strong> (hospitals, surgeries, maternity wards), the <strong>community</strong> (organisations, homes, advocacy), <strong>archive and memory</strong> (history, story, speculation) and the <strong>academy</strong> (universities, training, research culture).</li>
+        <li><strong>A question on or near a dividing line</strong> belongs to both sites. Trust in migrant maternity care, for example, lives between the clinic and the community.</li>
+        <li><strong>The inner ring</strong> holds questions about Endarkened Co-Composition itself, about data, time, audience and ethics. Every site depends on them, so they sit closest to the centre.</li>
+        <li><strong>The rim</strong> holds tensions: places where we disagreed, or where the method meets resistance.</li>
+        <li><strong>The outer orbit</strong> holds tangents: ideas, histories and practices raised on the day that aren’t research questions but shouldn’t be lost.</li>
+      </ul>
+      <h3>What the marks mean</h3>
+      <div id="guide-key"></div>
+      <h3>What the lines mean</h3>
+      <ul>
+        <li><strong>Solid lines</strong> join questions that share a concern. Select a question to read why.</li>
+        <li><strong>Gold dotted lines</strong> run from a tension to the questions it pulls on.</li>
+        <li><strong>Lilac dashed lines</strong> tie a tangent to the questions it speaks to.</li>
+      </ul>
+      <p>Position is not a ranking. Nearness to the centre says what kind of question it is, not how important it is. A question with many lines is one that many others lean on, which often makes it a good anchor for a study.</p>
+    </section>
+    <section>
+      <h2>Using the map</h2>
+      <ol>
+        <li><strong>Select any mark</strong> (click, tap, or press Tab then Enter) to open its card. Everything not connected to it fades back, so you can follow one thread at a time.</li>
+        <li><strong>Read the card.</strong> Each card gives the full question, where it would run, what Endarkened Co-Composition adds, what it would need on paper (ethics, funding, evidence), who it needs, and its risks. Gaps are marked “still to develop”.</li>
+        <li><strong>Follow a connection</strong> by selecting it in the card’s “Connected to” list.</li>
+        <li><strong>Switch layers</strong> on and off with the Connections, Tensions and Tangents boxes above the map.</li>
+        <li><strong>Select a contributor’s initials</strong> to outline everything they raised. Select them again to clear.</li>
+        <li><strong>Select the centre</strong> to return to the overview.</li>
+        <li><strong>On a phone,</strong> or if you’d rather read than look, use the list below the map. It holds every card, grouped by site.</li>
+      </ol>
+      <h3>What this map is, and isn’t</h3>
+      <p>It is a working record of a collective conversation, drawn from the symposium’s Padlets and transcripts. It is not a finished agenda, a ranking, or a set of commitments. Questions that emerged in discussion are worded from the transcript and stay provisional until the people who raised them confirm the wording. The map will change as co-authors add, refine and refuse.</p>
+    </section>
+  </div>
+
+  <h2 class="sectionhead">Every card, by site</h2>
+  <div class="index" id="index"></div>
+
+  <footer id="footer"></footer>
+
+  <details class="editor" id="editor" hidden>
+    <summary>For editors: preview changes before uploading</summary>
+    <p>Edit the spreadsheets, save them as CSV (UTF-8), then drop <code>cards.csv</code>, <code>links.csv</code>, <code>people.csv</code> and/or <code>settings.csv</code> here. The map redraws from your files in this browser only. Nothing is uploaded or saved. Any problems in the files are listed below.</p>
+    <div class="drop" id="drop">Drop CSV files here, or <label style="text-decoration:underline;cursor:pointer">choose files<input type="file" id="pick" accept=".csv,text/csv" multiple hidden></label></div>
+    <div class="problems" id="problems"></div>
+  </details>
+</div>
+
+<script>
+/* ===================== data loading ===================== */
+const FILES = ["cards", "links", "people", "settings"];
+let DATA = {cards: [], links: [], people: [], settings: []};
+
+function parseCSV(text) {
+  text = text.replace(/^﻿/, "");
+  const firstLine = text.split(/\r?\n/, 1)[0];
+  const delim = (firstLine.split(";").length > firstLine.split(",").length) ? ";" : ",";
+  const rows = []; let row = [], f = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === delim) { row.push(f); f = ""; }
+    else if (c === "\n") { row.push(f); rows.push(row); row = []; f = ""; }
+    else if (c !== "\r") f += c;
+  }
+  if (f !== "" || row.length) { row.push(f); rows.push(row); }
+  if (!rows.length) return [];
+  const head = rows.shift().map(h => h.trim().toLowerCase().replace(/\s+/g, "_"));
+  return rows.filter(r => r.some(x => x.trim() !== ""))
+    .map(r => Object.fromEntries(head.map((h, i) => [h, (r[i] || "").trim()])));
+}
+
+async function loadFromServer() {
+  const out = {};
+  for (const name of FILES) {
+    const res = await fetch(name + ".csv", {cache: "no-cache"});
+    if (!res.ok) throw new Error(name + ".csv could not be loaded (" + res.status + ")");
+    out[name] = parseCSV(await res.text());
+  }
+  return out;
+}
+
+/* ===================== model + layout ===================== */
+const SITES = {
+  clinic: {name: "Clinic", sub: "hospitals · surgeries · maternity wards", range: [-90, 0]},
+  community: {name: "Community", sub: "organisations · homes · advocacy", range: [0, 90]},
+  archive: {name: "Archive & memory", sub: "history · story · speculation", range: [90, 180]},
+  academy: {name: "Academy", sub: "universities · training · research culture", range: [-180, -90]},
+  method: {name: "Method ring", sub: "questions about Endarkened Co-Composition itself"}
+};
+const BOUNDARY = {"academy/clinic": -90, "clinic/community": 0, "community/archive": 90, "archive/academy": 180};
+const TYPES = {
+  padlet: "Padlet card", discussion: "Emerged in discussion", seed: "Seed example", project: "Project strand",
+  tension: "Tension", tangent: "Tangent"
+};
+const FIELD_LABELS = [["where", "Where it would run"], ["ec_adds", "What Endarkened Co-Composition adds"], ["on_paper", "On paper"], ["with_whom", "With whom"], ["risks", "Risks"]];
+const CX = 720, CY = 610, R_RING = 178, R_SITE = 300, R_RIM = 392, R_ORBIT = 545;
+const SITE_ALIASES = {"archive & memory": "archive", "archive and memory": "archive", "memory": "archive", "university": "academy", "method ring": "method", "ec": "method"};
+
+let N = [], E = [], byId = {}, PEOPLE = {}, SET = {}, problems = [];
+const norm = a => ((a % 360) + 540) % 360 - 180;            // to [-180,180)
+const rad = a => a * Math.PI / 180;
+
+function siteOf(raw) {
+  const parts = (raw || "").toLowerCase().split(/[\/+]| and (?=clinic|community|archive|academy)/).map(s => s.trim()).filter(Boolean).map(s => SITE_ALIASES[s] || s);
+  if (!parts.length) return {key: "", list: []};
+  for (const p of parts) if (!SITES[p]) problems.push(`Card site “${raw}” isn’t recognised. Use clinic, community, archive, academy or method (or two joined with /).`);
+  if (parts.length === 1) return {key: parts[0], list: parts};
+  const a = parts[0] + "/" + parts[1], b = parts[1] + "/" + parts[0];
+  if (a in BOUNDARY) return {key: a, list: parts};
+  if (b in BOUNDARY) return {key: b, list: parts};
+  problems.push(`Sites “${raw}” aren’t neighbours on the map, so the card is placed in ${SITES[parts[0]] ? SITES[parts[0]].name : parts[0]}.`);
+  return {key: parts[0], list: parts};
+}
+
+function wrapLabel(text, max = 24) {
+  const words = text.split(/\s+/), lines = [""];
+  for (const w of words) {
+    if ((lines[lines.length - 1] + " " + w).trim().length > max && lines[lines.length - 1]) { if (lines.length === 2) { lines[1] += "…"; break; } lines.push(w); }
+    else lines[lines.length - 1] = (lines[lines.length - 1] + " " + w).trim();
+  }
+  return lines;
+}
+
+function relax(items, minSep, obstacleSep) {
+  if (items.length < 2) return;
+  const movable = items.filter(n => !n.obstacle).length || 1;
+  const sepAll = Math.min(minSep, 360 / movable * 0.95);
+  const sepFor = (A, B) => (A.obstacle || B.obstacle) ? (obstacleSep || sepAll) : sepAll;
+  for (let pass = 0; pass < 300; pass++) {
+    items.sort((p, q) => p.a - q.a);
+    let moved = false;
+    for (let i = 0; i < items.length; i++) {
+      const A = items[i], B = items[(i + 1) % items.length];
+      let d = B.a - A.a; if (i === items.length - 1) d += 360;
+      const sep = sepFor(A, B);
+      if (d < sep - 0.01) {
+        const push = sep - d;
+        const pa = A.pinned || A.obstacle, pb = B.pinned || B.obstacle;
+        if (pa && pb) continue;
+        if (pa) B.a += push; else if (pb) A.a -= push;
+        else if (!A.pinned) { A.a -= push / 2; B.a += push / 2; }
+        moved = true;
+      }
+    }
+    items.forEach(n => { if (!n.obstacle) n.a = norm(n.a); });
+    if (!moved) break;
+  }
+}
+
+function build(raw) {
+  problems = [];
+  SET = Object.fromEntries((raw.settings || []).map(r => [(r.setting || r.key || "").toLowerCase(), r.value || ""]));
+  PEOPLE = Object.fromEntries((raw.people || []).filter(r => r.initials).map(r => [r.initials, r.name || r.initials]));
+  N = [{id: "CENTRE", type: "centre", title: SET.centre_title || "Endarkened Co-Composition", question: SET.centre_question || "", who: [], a: 0, r: 0}];
+  const seen = new Set(["CENTRE"]);
+  (raw.cards || []).forEach((r, i) => {
+    const id = r.id || ""; const rowNo = i + 2;
+    if (!id) { problems.push(`cards.csv row ${rowNo} has no id, so it was skipped.`); return; }
+    if (seen.has(id)) { problems.push(`The id “${id}” is used twice in cards.csv. Only the first was kept.`); return; }
+    seen.add(id);
+    const type = (r.type || "").toLowerCase();
+    if (!TYPES[type]) problems.push(`Card ${id}: type “${r.type}” isn’t recognised. Use padlet, discussion, seed, project, tension or tangent.`);
+    if (!r.title) problems.push(`Card ${id} has no title.`);
+    const who = (r.contributors || "").split(/[;,]/).map(s => s.trim()).filter(Boolean);
+    const n = {
+      id, type: TYPES[type] ? type : "padlet", title: r.title || id, question: r.question || "",
+      label: r.label ? r.label.split("/").map(s => s.trim()).filter(Boolean) : wrapLabel(r.title || id),
+      who, fields: r, note: r.note || "", source: r.source || "",
+      manualA: r.angle !== "" && r.angle !== undefined && !isNaN(+r.angle) ? +r.angle : null,
+      manualR: r.radius !== "" && r.radius !== undefined && !isNaN(+r.radius) ? +r.radius : null
+    };
+    if (n.type !== "tension" && n.type !== "tangent") {
+      const s = siteOf(r.site); n.site = s.key; n.sites = s.list;
+      if (!s.key) { problems.push(`Card ${id} has no site, so it was placed in the method ring.`); n.site = "method"; n.sites = ["method"]; }
+    }
+    N.push(n);
+  });
+  byId = Object.fromEntries(N.map(n => [n.id, n]));
+  N.forEach(n => n.who.forEach(w => { if (!PEOPLE[w]) problems.push(`Card ${n.id}: contributor “${w}” isn’t in people.csv.`); }));
+
+  E = [];
+  (raw.links || []).forEach((r, i) => {
+    const a = (r.from || "").trim(), b = (r.to || "").trim();
+    if (!a && !b) return;
+    if (!byId[a] || !byId[b]) { problems.push(`links.csv row ${i + 2} (${a} → ${b}) refers to a card that doesn’t exist.`); return; }
+    E.push({a, b, why: r.why || ""});
+  });
+  // automatic spokes from centre to the method ring
+  N.filter(n => n.site === "method").forEach(n => { if (!E.some(e => (e.a === "CENTRE" && e.b === n.id) || (e.b === "CENTRE" && e.a === n.id))) E.push({a: "CENTRE", b: n.id, why: "", auto: true}); });
+
+  layout();
+}
+
+function layout() {
+  // 1. method ring: evenly spaced from the top
+  const ring = N.filter(n => n.site === "method");
+  ring.forEach((n, i) => { n.a = n.manualA ?? (-90 + i * 360 / ring.length); n.r = n.manualR ?? R_RING; });
+
+  // 2. site cards: spread inside their quarter; boundary cards on the line
+  const siteCards = N.filter(n => n.site && n.site !== "method");
+  const groups = {};
+  siteCards.forEach(n => (groups[n.site] = groups[n.site] || []).push(n));
+  for (const [k, list] of Object.entries(groups)) {
+    if (k in BOUNDARY) list.forEach((n, i) => n.a = BOUNDARY[k] + (i - (list.length - 1) / 2) * 10);
+    else { const [s, e] = SITES[k].range; list.forEach((n, i) => n.a = s + (i + 1) * (e - s) / (list.length + 1)); }
+  }
+  siteCards.forEach(n => { if (n.manualA !== null) { n.a = n.manualA; n.pinned = true; } });
+  relax(siteCards, 22);
+  siteCards.sort((p, q) => p.a - q.a).forEach((n, i) => n.r = n.manualR ?? (R_SITE + (i % 2 ? 38 : -22)));
+
+  // 3. tensions and tangents: drawn toward the cards they link to
+  const anchorAngle = n => {
+    // links in links.csv order; cards placed by site count more than inner-ring cards
+    const others = E.filter(e => e.a === n.id || e.b === n.id).map(e => byId[e.a === n.id ? e.b : e.a])
+      .filter(o => o && o.a !== undefined && o.type !== "centre" && o.type !== n.type);
+    if (!others.length) return null;
+    let sx = 0, sy = 0, w = 0;
+    others.forEach(o => { const k = o.site === "method" ? 0.4 : 1; sx += k * Math.cos(rad(o.a)); sy += k * Math.sin(rad(o.a)); w += k; });
+    // if the linked cards pull in opposite directions, the first link listed decides
+    if (Math.hypot(sx, sy) / w < 0.55) { const first = others.find(o => o.site !== "method") || others[0]; return first.a; }
+    return Math.atan2(sy, sx) * 180 / Math.PI;
+  };
+  for (const [type, r, sep] of [["tension", R_RIM, 24], ["tangent", R_ORBIT, 21]]) {
+    const list = N.filter(n => n.type === type);
+    list.forEach((n, i) => {
+      const a = anchorAngle(n);
+      n.a = n.manualA ?? (a === null ? -90 + i * 360 / list.length : a);
+      n.pinned = n.manualA !== null; n.r = n.manualR ?? r;
+    });
+    const obstacles = type === "tangent" ? N.filter(t => t.type === "tension").map(t => ({a: t.a, obstacle: true})) : [];
+    relax(list.concat(obstacles), sep, 11);
+  }
+  const place = n => { n.x = CX + n.r * Math.cos(rad(n.a)); n.y = CY + n.r * Math.sin(rad(n.a)); };
+  N.forEach(place);
+  declutter(siteCards, place);
+}
+
+// nudge site cards apart until their labels no longer overlap
+function declutter(list, place) {
+  const box = n => {
+    const w = Math.max(...n.label.map(l => l.length)) * 7.4 + 10, h = n.label.length * 15 + (n.who.length ? 16 : 0);
+    return {x1: n.x - w / 2, x2: n.x + w / 2, y1: n.y - 16, y2: n.y + 22 + h};
+  };
+  const hit = (p, q) => p.x1 < q.x2 && q.x1 < p.x2 && p.y1 < q.y2 && q.y1 < p.y2;
+  for (let pass = 0; pass < 120; pass++) {
+    let moved = false;
+    for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+      const A = list[i], B = list[j];
+      if (!hit(box(A), box(B))) continue;
+      moved = true;
+      const [outer, inner] = A.r >= B.r ? [A, B] : [B, A];
+      let changed = false;
+      if (outer.manualR === null && outer.r < 352) { outer.r += 5; changed = true; }
+      if (inner.manualR === null && inner.r > 246) { inner.r -= 5; changed = true; }
+      if (!changed) {
+        const d = norm(B.a - A.a) >= 0 ? 1 : -1;
+        if (!A.pinned) A.a -= d * 1.5; if (!B.pinned) B.a += d * 1.5;
+      }
+      place(A); place(B);
+    }
+    if (!moved) break;
+  }
+}
+
+/* ===================== drawing ===================== */
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById("map");
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const inlineEm = s => esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>");
+let edgeEls = [], nodeEls = {}, current = "CENTRE", personFilter = null;
+const layers = {link: true, tension: true, tangent: true};
+const edgeType = (A, B) => (A.type === "tension" || B.type === "tension") ? "tension"
+  : (A.type === "tangent" || B.type === "tangent") ? "tangent" : (A.type === "centre" || B.type === "centre") ? "spoke" : "link";
+
+function shapeFor(g, n, size) {
+  if (n.type === "tension") {
+    el("rect", {x: n.x - size - 4, y: n.y - size - 4, width: (size + 4) * 2, height: (size + 4) * 2, transform: `rotate(45 ${n.x} ${n.y})`, class: "halo"}, g);
+    el("rect", {x: n.x - size, y: n.y - size, width: size * 2, height: size * 2, transform: `rotate(45 ${n.x} ${n.y})`, class: "shape"}, g);
+  } else {
+    el("circle", {cx: n.x, cy: n.y, r: size + 6, class: "halo"}, g);
+    el("circle", {cx: n.x, cy: n.y, r: size, class: "shape"}, g);
+    if (n.type === "project") el("circle", {cx: n.x, cy: n.y, r: size + 4, fill: "none", stroke: "var(--gold)", "stroke-width": 1.2}, g);
+  }
+}
+
+function draw() {
+  svg.innerHTML = ""; edgeEls = []; nodeEls = {};
+  const field = el("g", {}, svg);
+  el("circle", {cx: CX, cy: CY, r: R_RIM, class: "rim"}, field);
+  el("circle", {cx: CX, cy: CY, r: R_RING, class: "rim", "stroke-dasharray": "2 5"}, field);
+  el("line", {x1: CX, y1: CY - R_RIM, x2: CX, y2: CY + R_RIM, class: "cross"}, field);
+  el("line", {x1: CX - R_RIM, y1: CY, x2: CX + R_RIM, y2: CY, class: "cross"}, field);
+  [["academy", 40, 58, "start"], ["clinic", 1400, 58, "end"], ["archive", 40, 1150, "start"], ["community", 1400, 1150, "end"]].forEach(([k, x, y, anc]) => {
+    el("text", {x, y, "text-anchor": anc, class: "quad"}, field).textContent = SITES[k].name;
+    el("text", {x, y: y + 22, "text-anchor": anc, class: "quadsub"}, field).textContent = SITES[k].sub;
+  });
+
+  const ge = el("g", {}, svg);
+  E.forEach(e => {
+    const A = byId[e.a], B = byId[e.b], type = edgeType(A, B);
+    const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, k = type === "spoke" ? 0 : 0.18;
+    const p = el("path", {d: `M${A.x},${A.y} Q${mx + (CX - mx) * k},${my + (CY - my) * k} ${B.x},${B.y}`, class: `edge ${type}`}, ge);
+    edgeEls.push({...e, type, p});
+  });
+
+  const gn = el("g", {}, svg);
+  N.forEach(n => {
+    const g = el("g", {class: `node n-${n.type}${n.site === "method" ? " ring" : ""}`, tabindex: 0, role: "button", "aria-label": n.title}, gn);
+    if (n.type === "centre") {
+      el("circle", {cx: n.x, cy: n.y, r: 62, class: "halo"}, g);
+      el("circle", {cx: n.x, cy: n.y, r: 56, class: "shape"}, g);
+      el("text", {x: n.x, y: n.y - 6, "text-anchor": "middle", class: "label"}, g).textContent = "Endarkened";
+      el("text", {x: n.x, y: n.y + 9, "text-anchor": "middle", class: "label"}, g).textContent = "Co-Composition";
+      el("text", {x: n.x, y: n.y + 26, "text-anchor": "middle", class: "sub"}, g).textContent = "IF · WHEN · HOW";
+    } else {
+      const size = n.type === "tangent" ? 7 : n.type === "tension" ? 9 : n.site === "method" ? 12 : 13;
+      shapeFor(g, n, size);
+      let lx = n.x, ly = n.y + size + 17, anchor = "middle";
+      if (n.type === "tangent" || n.type === "tension") {
+        const c = Math.cos(rad(n.a)), s = Math.sin(rad(n.a)), off = size + 10;
+        if (c > 0.35) { anchor = "start"; lx = n.x + off; ly = n.y - (n.label.length - 1) * 7 + 4; }
+        else if (c < -0.35) { anchor = "end"; lx = n.x - off; ly = n.y - (n.label.length - 1) * 7 + 4; }
+        else ly = s < 0 ? n.y - off - (n.label.length - 1) * 14 : n.y + off + 10;
+      }
+      const t = el("text", {x: lx, y: ly, "text-anchor": anchor, class: "label"}, g);
+      n.label.forEach((line, i) => { el("tspan", {x: lx, dy: i ? 15 : 0}, t).textContent = line; });
+      if (n.type !== "tangent" && n.type !== "tension" && n.who.length)
+        el("text", {x: lx, y: ly + n.label.length * 15, "text-anchor": anchor, class: "who"}, g).textContent = n.who.join(" · ");
+    }
+    nodeEls[n.id] = g;
+    g.addEventListener("click", () => select(n.id, true));
+    g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id, true); } });
+    g.addEventListener("mouseenter", () => focusOn(n.id));
+    g.addEventListener("mouseleave", () => focusOn(current));
+  });
+  applyLayers(); applyPerson();
+}
+
+function legendSwatch(type, ring) {
+  const s = document.createElementNS(NS, "svg"); s.setAttribute("width", 18); s.setAttribute("height", 18); s.setAttribute("viewBox", "0 0 18 18");
+  const g = el("g", {class: `n-${type}`}, s);
+  if (type === "tension") el("rect", {x: 4, y: 4, width: 10, height: 10, transform: "rotate(45 9 9)", class: "shape"}, g);
+  else el("circle", {cx: 9, cy: 9, r: type === "tangent" ? 5 : 6.5, class: "shape", "stroke-width": 2}, g);
+  if (type === "project") el("circle", {cx: 9, cy: 9, r: 8.3, fill: "none", stroke: "var(--gold)", "stroke-width": 1}, g);
+  return s;
+}
+const KEY = [
+  ["padlet", "Padlet card", "A question posted by a participant on the research-agenda Padlet."],
+  ["discussion", "Emerged in discussion", "A question raised aloud on the day and worded from the transcript. Provisional until its contributors confirm it."],
+  ["seed", "Seed example", "The worked example used to show how a card is filled in. Open to correction."],
+  ["project", "Project strand", "A question already being pursued within CURED."],
+  ["tension", "Tension", "A disagreement, uncertainty or pressure on the method. Sits on the rim."],
+  ["tangent", "Tangent", "An idea, history or practice worth keeping that isn’t itself a research question. Orbits outside."]
+];
+function drawLegend() {
+  const lg = document.getElementById("legend"); lg.innerHTML = "";
+  const gk = document.getElementById("guide-key"); gk.innerHTML = "";
+  KEY.forEach(([t, name, desc]) => {
+    const span = document.createElement("span"); span.appendChild(legendSwatch(t)); span.appendChild(document.createTextNode(name)); lg.appendChild(span);
+    const row = document.createElement("div"); row.className = "key";
+    const sw = document.createElement("div"); sw.appendChild(legendSwatch(t));
+    const tx = document.createElement("div"); tx.innerHTML = `<strong>${esc(name)}.</strong> ${esc(desc)}`;
+    row.append(sw, tx); gk.appendChild(row);
+  });
+  const ringRow = document.createElement("div"); ringRow.className = "key";
+  ringRow.innerHTML = `<div></div><div><strong>Smaller marks on the inner ring</strong> are questions about Endarkened Co-Composition itself. They use the same fills as above.</div>`;
+  gk.appendChild(ringRow);
+}
+
+function drawPeople() {
+  const box = document.getElementById("people");
+  box.querySelectorAll(".chip").forEach(c => c.remove());
+  Object.entries(PEOPLE).forEach(([k, name]) => {
+    const b = document.createElement("button"); b.className = "chip"; b.textContent = k; b.title = name; b.setAttribute("aria-label", name);
+    b.setAttribute("aria-pressed", String(personFilter === k));
+    b.addEventListener("click", () => {
+      personFilter = personFilter === k ? null : k;
+      box.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c.textContent === personFilter)));
+      applyPerson();
+    });
+    box.appendChild(b);
+  });
+}
+function applyPerson() { N.forEach(n => nodeEls[n.id] && nodeEls[n.id].classList.toggle("match", !!personFilter && n.who.includes(personFilter))); focusOn(current); }
+function applyLayers() {
+  edgeEls.forEach(e => e.p.style.display = (e.type === "spoke" ? layers.link : layers[e.type]) ? "" : "none");
+  N.forEach(n => { if (n.type === "tangent" || n.type === "tension") nodeEls[n.id].style.display = layers[n.type] ? "" : "none"; });
+}
+[["tg-link", "link"], ["tg-tension", "tension"], ["tg-tangent", "tangent"]].forEach(([id, k]) =>
+  document.getElementById(id).addEventListener("change", e => { layers[k] = e.target.checked; applyLayers(); }));
+
+const neighbours = id => edgeEls.filter(e => e.a === id || e.b === id);
+function focusOn(id) {
+  if (!byId[id]) id = "CENTRE";
+  const keep = new Set([id]); neighbours(id).forEach(e => { keep.add(e.a); keep.add(e.b); });
+  const dimOthers = id !== "CENTRE";
+  N.forEach(n => {
+    const byPerson = personFilter && !n.who.includes(personFilter);
+    nodeEls[n.id] && nodeEls[n.id].classList.toggle("dim", !keep.has(n.id) && (dimOthers || !!byPerson));
+  });
+  edgeEls.forEach(e => { const hot = e.a === id || e.b === id; e.p.classList.toggle("hot", hot && dimOthers); e.p.classList.toggle("dim", dimOthers && !hot); });
+}
+
+const panel = document.getElementById("panel");
+function siteName(n) {
+  if (n.type === "tension") return "Rim"; if (n.type === "tangent") return "Orbit";
+  return (n.sites || []).map(s => SITES[s] ? SITES[s].name : s).join(" / ");
+}
+function select(id, scroll) {
+  if (!byId[id]) id = "CENTRE";
+  current = id;
+  N.forEach(n => nodeEls[n.id] && nodeEls[n.id].classList.toggle("sel", n.id === id));
+  focusOn(id);
+  const n = byId[id];
+  if (id === "CENTRE") { panel.innerHTML = overview(); bindPanel(); return; }
+  const pill = n.type === "discussion" ? "pill em" : n.type === "tension" ? "pill x" : n.type === "tangent" ? "pill t" : "pill";
+  let h = `<div class="kind"><span class="${pill}">${TYPES[n.type]}</span><span>${esc(siteName(n))}</span><span class="id">${esc(n.id)}</span></div>`;
+  h += `<h2>${esc(n.title)}</h2>`;
+  if (n.question) h += `<p class="q">${esc(n.question)}</p>`;
+  let dl = "";
+  FIELD_LABELS.forEach(([k, label]) => { if (n.fields[k]) dl += `<div><dt>${label}</dt><dd>${esc(n.fields[k])}</dd></div>`; });
+  (n.fields.more || "").split(/\n+/).map(s => s.trim()).filter(Boolean).forEach(line => {
+    const m = line.match(/^([^:]{2,40}):\s*(.+)$/);
+    dl += m ? `<div><dt>${esc(m[1])}</dt><dd>${esc(m[2])}</dd></div>` : `<div><dd>${esc(line)}</dd></div>`;
+  });
+  if (dl) h += `<dl>${dl}</dl>`;
+  if (n.type !== "tension" && n.type !== "tangent" && n.type !== "project") {
+    const missing = FIELD_LABELS.filter(([k]) => !n.fields[k]).map(([, l]) => l.toLowerCase());
+    if (missing.length) h += `<p class="todo">Still to develop: ${esc(missing.join(", "))}.</p>`;
+  }
+  if (n.who.length) h += `<h3>Contributed by</h3><div>${n.who.map(w => esc(PEOPLE[w] || w)).join(", ")}</div>`;
+  if (n.source) h += `<h3>Where it came from</h3><div>${esc(n.source)}</div>`;
+  if (n.note) h += `<p class="note">${esc(n.note)}</p>`;
+  const nb = neighbours(id);
+  if (nb.length) {
+    h += `<h3>Connected to</h3><ul class="links">`;
+    nb.forEach(e => { const o = byId[e.a === id ? e.b : e.a];
+      h += `<li><button data-go="${esc(o.id)}">${esc(o.title)}<small>${esc(e.why || (o.type === "centre" ? "The centre" : TYPES[o.type]))}</small></button></li>`; });
+    h += `</ul>`;
+  }
+  panel.innerHTML = h; bindPanel();
+  if (scroll && window.matchMedia("(max-width:1080px)").matches) panel.scrollIntoView({behavior: "smooth", block: "start"});
+}
+function bindPanel() { panel.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go, true))); }
+function overview() {
+  const deg = {}; edgeEls.forEach(e => { if (e.type === "link") { deg[e.a] = (deg[e.a] || 0) + 1; deg[e.b] = (deg[e.b] || 0) + 1; } });
+  const ranked = Object.entries(deg).sort((x, y) => y[1] - x[1]);
+  const count = f => N.filter(f).length;
+  const placed = count(n => n.site && n.site !== "method"), ring = count(n => n.site === "method");
+  let most = "";
+  if (ranked.length) { const top = ranked[0][1]; most = `<div><dt>Most connected</dt><dd>${ranked.filter(r => r[1] === top).map(r => esc(byId[r[0]].title)).join("; ")} (${top} links each, not counting tensions and tangents).</dd></div>`; }
+  return `<div class="kind"><span class="pill">Centre</span><span>Overview</span></div>
+  <h2>${esc(SET.centre_title || "Endarkened Co-Composition")}</h2>
+  ${SET.centre_question ? `<p class="q">${esc(SET.centre_question)}</p>` : ""}
+  <dl>
+   <div><dt>On the map</dt><dd>${placed} questions placed by site and ${ring} about Endarkened Co-Composition itself, of which ${count(n => n.type === "discussion")} emerged in discussion. ${count(n => n.type === "tension")} tensions and ${count(n => n.type === "tangent")} tangents.</dd></div>
+   ${most}
+   <div><dt>Start here</dt><dd>Select any mark to open its card. “How to read this map”, below, explains the layout.</dd></div>
+  </dl>
+  ${SET.centre_note ? `<p class="note">${esc(SET.centre_note)}</p>` : ""}`;
+}
+
+function drawIndex() {
+  const idx = document.getElementById("index"); idx.innerHTML = "";
+  const groups = [["clinic", n => n.sites && n.sites[0] === "clinic"], ["community", n => n.sites && n.sites[0] === "community"],
+    ["archive", n => n.sites && n.sites[0] === "archive"], ["academy", n => n.sites && n.sites[0] === "academy"],
+    ["method", n => n.site === "method"], ["rim", n => n.type === "tension" || n.type === "tangent"]];
+  groups.forEach(([g, f]) => {
+    const items = N.filter(f); if (!items.length) return;
+    const sec = document.createElement("section");
+    const head = g === "rim" ? {name: "Rim and orbit", sub: "tensions and tangents"} : SITES[g];
+    sec.innerHTML = `<h2>${esc(head.name)}</h2><p class="sub">${esc(head.sub)}</p>`;
+    const ul = document.createElement("ul");
+    items.forEach(n => {
+      const li = document.createElement("li"), b = document.createElement("button"); b.className = "li";
+      const also = n.sites && n.sites.length > 1 ? " · also " + n.sites.slice(1).map(s => SITES[s] ? SITES[s].name : s).join(", ") : "";
+      b.innerHTML = `<span class="dot ${n.type === "seed" ? "discussion" : n.type}"></span><span>${esc(n.title)}<i>${TYPES[n.type]}${also}${n.who.length ? " · " + esc(n.who.join(", ")) : ""}</i></span>`;
+      b.addEventListener("click", () => { select(n.id); document.querySelector(".stage").scrollIntoView({behavior: "smooth", block: "start"}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+    sec.appendChild(ul); idx.appendChild(sec);
+  });
+}
+
+function renderAll(raw) {
+  build(raw);
+  document.getElementById("eyebrow").textContent = SET.eyebrow || "Listening Across · Research agenda map";
+  if (SET.title) document.getElementById("title").innerHTML = inlineEm(SET.title);
+  document.getElementById("intro").textContent = SET.intro || "";
+  document.getElementById("footer").textContent = SET.footer || "";
+  document.getElementById("editor").hidden = !/^(yes|true|on|1)$/i.test(SET.show_editor_tools || "");
+  draw(); drawLegend(); drawPeople(); drawIndex();
+  select(byId[current] ? current : "CENTRE");
+  const pb = document.getElementById("problems");
+  pb.innerHTML = problems.length ? `<strong>${problems.length} thing${problems.length > 1 ? "s" : ""} to check in the files:</strong><ul>${problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : "";
+  if (problems.length && SET.show_editor_tools && /^(yes|true|on|1)$/i.test(SET.show_editor_tools)) document.getElementById("editor").open = true;
+}
+
+/* ===================== editor preview (local only) ===================== */
+async function readDropped(files) {
+  const next = {...DATA};
+  for (const f of files) {
+    const name = f.name.toLowerCase().replace(/\.csv$/, "").replace(/[^a-z]/g, "");
+    const key = FILES.find(k => name.startsWith(k));
+    if (key) next[key] = parseCSV(await f.text());
+  }
+  DATA = next; renderAll(DATA);
+  document.getElementById("status").hidden = true;
+}
+const drop = document.getElementById("drop");
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => readDropped([...e.dataTransfer.files]));
+document.getElementById("pick").addEventListener("change", e => readDropped([...e.target.files]));
+
+loadFromServer().then(d => { DATA = d; renderAll(DATA); }).catch(err => {
+  const st = document.getElementById("status"); st.hidden = false;
+  st.innerHTML = `<strong>The map’s data files couldn’t be loaded.</strong> ${esc(err.message)}. If you opened this page straight from your computer, browsers block it from reading the CSV files beside it. Upload the folder to your website, or drop the four CSV files into the box at the bottom of the page to preview the map here.`;
+  document.getElementById("intro").textContent = "";
+  document.getElementById("editor").hidden = false; document.getElementById("editor").open = true;
+  drawLegend();
+});
+</script>
+</body>
+</html>
