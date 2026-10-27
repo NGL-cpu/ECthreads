@@ -583,7 +583,6 @@ function select(id, scroll) {
     if (missing.length) h += `<p class="todo">Still to develop: ${esc(missing.join(", "))}.</p>`;
   }
   if (n.who.length) h += `<h3>Contributed by</h3><div>${n.who.map(w => esc(PEOPLE[w] || w)).join(", ")}</div>`;
-  if (n.source) h += `<h3>Where it came from</h3><div>${esc(n.source)}</div>`;
   if (n.note) h += `<p class="note">${esc(n.note)}</p>`;
   const nb = neighbours(id);
   if (nb.length) {
