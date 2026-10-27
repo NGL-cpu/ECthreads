@@ -174,3 +174,11 @@ footer.site .funders img.logo{height:36px}
 .funders img.logo.on-dark{background:#13151f;padding:8px 12px;border-radius:3px;box-sizing:content-box}
 .funders img.logo.on-light{background:#ffffff;padding:4px 8px;border-radius:3px;box-sizing:content-box}
 .prose p.aside{border-left:2px solid var(--gold);padding-left:14px;color:var(--muted);font-size:15px}
+/* long documents (e.g. the symposium synthesis) */
+.doc h2{font-size:clamp(26px,3vw,36px);margin:48px 0 12px}
+.doc h3{font-family:var(--display);font-weight:400;font-size:24px;margin:28px 0 8px}
+.doc table{width:100%;border-collapse:collapse;margin:8px 0 20px;font-size:14px;display:block;overflow-x:auto}
+.doc th,.doc td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.doc th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.doc blockquote{margin:12px 0 18px;padding-left:16px;border-left:2px solid var(--gold);font-family:var(--display);font-style:italic;font-size:19px}
+.doc ol,.doc ul{padding-left:22px}
