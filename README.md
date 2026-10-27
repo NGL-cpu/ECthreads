@@ -1,6 +1,6 @@
-# THREAD
+# THREADS
 
-Testimony · Healing · Repair · Embodied Archives · Dreaming (working name)
+Testimony · Healing · Repair · Embodied Archives · Dreaming · Sound (working name)
 
 The public website for a research and composition project on gynaecological racism, sound and the archive, held by the life of Anarcha. Led by Dr L. Gre (Studio Gre), funded by the Arts and Humanities Research Council at the University of Southampton.
 

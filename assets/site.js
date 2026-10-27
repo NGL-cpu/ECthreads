@@ -1,4 +1,4 @@
-/* THREAD · shared script
+/* THREADS · shared script
    1. Draws the header, navigation and footer on every page (edit NAV below to change the menu).
    2. Fills any element with data-list="…" from the matching spreadsheet in /data.
    3. Draws the moving gold thread and the strand illustrations. */
@@ -8,7 +8,7 @@ const NAV = [
   ["opera.html", "Opera"], ["film.html", "Film"], ["archive.html", "Archive"],
   ["people.html", "People"], ["publications.html", "Publications"], ["timeline.html", "Timeline"]
 ];
-const NOTICE = "This site is in development. THREAD is a working name.";
+const NOTICE = "This site is in development. THREADS is a working name.";
 
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const yes = v => /^(yes|y|true|1)$/i.test(String(v || "").trim());
@@ -23,7 +23,7 @@ function chrome() {
       ${NOTICE ? `<div class="notice gutter">${esc(NOTICE)}</div>` : ""}
       <div class="gutter"><div class="inner">
         <nav class="site-nav" aria-label="Main">
-          <a class="mark" href="./">THREAD<small>working name</small></a>
+          <a class="mark" href="./">THREADS<small>working name</small></a>
           <button class="menu-btn" aria-expanded="false" aria-controls="menu">Menu</button>
           <ul id="menu">${NAV.map(([h, t]) => `<li><a href="${h}"${here === h ? ' aria-current="page"' : ""}>${t}</a></li>`).join("")}</ul>
         </nav>
@@ -34,7 +34,7 @@ function chrome() {
   const foot = document.getElementById("site-footer");
   if (foot) foot.innerHTML = `
     <div class="gutter"><div class="inner"><footer class="site">
-      <div><div class="mark">THREAD</div>Led by Dr L. Gre · <a href="https://studiogre.studio">Studio Gre</a></div>
+      <div><div class="mark">THREADS</div>Led by Dr L. Gre · <a href="https://studiogre.studio">Studio Gre</a></div>
       <div>Funded by the Arts and Humanities Research Council · University of Southampton</div>
     </footer></div></div>`;
 }
