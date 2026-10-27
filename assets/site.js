@@ -80,10 +80,16 @@ const RENDER = {
       ${vertical && r.detail ? `<div class="detail">${esc(r.detail)}</div>` : ""}</li>`).join("")}</ol>`;
   },
   people(rows) {
-    return `<div class="cards">${rows.filter(shown).map(r => `
+    // anyone whose role is "Project Associate" is listed after the team, as names and organisations only
+    const visible = rows.filter(shown), isAssoc = r => /^project associate$/i.test((r.role || "").trim());
+    const team = visible.filter(r => !isAssoc(r)), assoc = visible.filter(isAssoc);
+    let h = `<div class="cards">${team.map(r => `
       <article class="card person"><h3>${esc(r.name)}</h3><div class="role">${esc(r.role)}</div>
       ${r.affiliation ? `<div class="meta">${esc(r.affiliation)}</div>` : ""}${r.bio ? paras(r.bio) : ""}
       ${link(r.link, r.link_text || "More", "more")}</article>`).join("")}</div>`;
+    if (assoc.length) h += `<div class="associates"><h2>Project associates</h2><ul>${assoc.map(r => `
+      <li>${r.link ? link(r.link, r.name) : esc(r.name)}${r.affiliation && r.affiliation !== r.name ? `<span>${esc(r.affiliation)}</span>` : ""}</li>`).join("")}</ul></div>`;
+    return h;
   },
   publications(rows) {
     return `<ul class="pubs">${rows.filter(shown).map(r => `

@@ -14,7 +14,7 @@ Most lists on the site come from the spreadsheets in `data/`. Edit one in Excel,
 |---|---|---|
 | `timeline.csv` | Timeline page and homepage | `show_on_home` = yes puts a row on the homepage; `current` = yes fills its dot |
 | `gatherings.csv` | Gatherings | `page` links to a page about the gathering |
-| `people.csv` | People | Only add someone once they have agreed to be listed |
+| `people.csv` | People | Only add someone once they have agreed to be listed. Anyone whose role is `Project Associate` appears in the centred list under the team, by name and organisation only |
 | `publications.csv` | Publications | |
 | `opera-updates.csv` | The Opera, “Notes and recordings” | |
 | `screenings.csv` | The Film, “Where to see it” | |
