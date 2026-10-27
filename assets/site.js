@@ -94,7 +94,7 @@ const RENDER = {
   },
   gatherings(rows) {
     return `<div class="cards">${rows.filter(shown).map(r => `
-      <article class="card"><div class="meta">${esc(r.date)} · ${esc(r.place)}</div><h3>${esc(r.title)}</h3>
+      <article class="card">${r.image ? `<img class="card-img" src="${esc(r.image)}" alt="${esc(r.image_alt || r.title)}" loading="lazy">` : ""}<div class="meta">${esc(r.date)} · ${esc(r.place)}</div><h3>${esc(r.title)}</h3>
       ${r.summary ? paras(r.summary) : ""}${link(r.page, r.page_text || "Read more", "more")}</article>`).join("")}</div>`;
   },
   updates(rows) {

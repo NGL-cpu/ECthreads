@@ -195,3 +195,12 @@ footer.site .funders img.logo{height:36px}
 .origin .soon{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haint)}
 .origin .origin-link{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;margin-top:14px}
 .origin .origin-link a{font-weight:500}
+/* photographs */
+.plate img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-credit{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);margin:18px 0 0}
+.photo-credit a,.feature-photo figcaption a{color:inherit}
+.feature-photo{margin:0 0 40px}
+.feature-photo img{width:100%;height:auto;border-radius:4px;display:block}
+.feature-photo figcaption{font-size:13px;color:var(--muted);margin-top:10px;max-width:80ch}
+.card-img{width:calc(100% + 44px);max-width:none;margin:-20px -22px 12px;aspect-ratio:3/2;object-fit:cover;border-radius:4px 4px 0 0}
+.item .frame img{width:100%;height:100%;object-fit:cover}
