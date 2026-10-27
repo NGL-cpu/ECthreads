@@ -87,7 +87,7 @@ const RENDER = {
       <article class="card person"><h3>${esc(r.name)}</h3><div class="role">${esc(r.role)}</div>
       ${r.affiliation ? `<div class="meta">${esc(r.affiliation)}</div>` : ""}${r.bio ? paras(r.bio) : ""}
       ${link(r.link, r.link_text || "More", "more")}</article>`).join("")}</div>`;
-    if (assoc.length) h += `<div class="associates"><h2>Project associates</h2><ul>${assoc.map(r => `
+    if (assoc.length) h += `<div class="associates"><h2>Project Associates</h2><ul>${assoc.map(r => `
       <li>${r.link ? link(r.link, r.name) : esc(r.name)}${r.affiliation && r.affiliation !== r.name ? `<span>${esc(r.affiliation)}</span>` : ""}</li>`).join("")}</ul></div>`;
     return h;
   },
