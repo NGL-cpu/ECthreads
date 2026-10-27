@@ -35,7 +35,10 @@ function chrome() {
   if (foot) foot.innerHTML = `
     <div class="gutter"><div class="inner"><footer class="site">
       <div><div class="mark">THREADS</div>Led by Dr L. Gre · <a href="https://studiogre.studio">Studio Gre</a></div>
-      <div>Funded by the Arts and Humanities Research Council · University of Southampton</div>
+      <div class="funders">
+        <img class="logo" src="images/logos/ukri-ahrc.svg" alt="UKRI Arts and Humanities Research Council">
+        <img class="logo" src="images/logos/university-of-southampton.svg" alt="University of Southampton">
+      </div>
     </footer></div></div>`;
 }
 
@@ -180,4 +183,12 @@ function plates() {
   });
 }
 
-chrome(); heroThread(); plates(); fillLists();
+/* logos: until the official files are in images/logos, show the organisation's name instead */
+function logos() {
+  document.querySelectorAll("img.logo").forEach(img => {
+    const swap = () => { const s = document.createElement("span"); s.className = "logo-text"; s.textContent = img.alt; img.replaceWith(s); };
+    if (img.complete && img.naturalWidth === 0) swap(); else img.addEventListener("error", swap);
+  });
+}
+
+chrome(); logos(); heroThread(); plates(); fillLists();

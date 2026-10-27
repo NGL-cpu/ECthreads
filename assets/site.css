@@ -165,3 +165,8 @@ footer.site a{color:var(--muted)}
 /* inner pages: the thread runs along the foot of the header, under the title */
 .hero.sub{padding-bottom:64px}
 .hero.sub canvas{top:auto;bottom:0;height:70px}
+/* funder logos */
+.funders{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:6px}
+.funders img.logo{height:44px;width:auto;max-width:100%}
+footer.site .funders img.logo{height:36px}
+.logo-text{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);padding:8px 12px;border-radius:2px}
