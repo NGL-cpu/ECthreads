@@ -107,6 +107,9 @@ header p{margin:0;color:var(--muted);max-width:68ch}
 .halo{fill:none;stroke:var(--gold);stroke-width:2.5;opacity:0}
 .node.sel .halo{opacity:1}
 .label{font-family:var(--body);font-size:13px;fill:var(--fg);font-weight:500}
+/* hover or keyboard focus: the label and initials grow, with a halo so they read over the lines beneath */
+.node .label,.node .who{transition:transform .15s ease;paint-order:stroke;stroke:var(--surface);stroke-width:0;stroke-linejoin:round}
+.node:not(.n-centre):hover .label,.node:not(.n-centre):hover .who,.node:not(.n-centre):focus-visible .label,.node:not(.n-centre):focus-visible .who{transform:scale(1.6);stroke-width:4px}
 .ring .label{font-size:12.5px}
 .n-tangent .label{font-size:12px;font-style:italic;fill:var(--tangent);font-weight:400}
 .n-tension .label{font-size:12px;fill:var(--gold);font-weight:500}
@@ -159,7 +162,7 @@ header p{margin:0;color:var(--muted);max-width:68ch}
 .status[hidden]{display:none}
 .type-credit{margin-top:10px;color:var(--muted);font-size:13px;max-width:80ch}
 footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
-@media (prefers-reduced-motion: reduce){.edge,.node{transition:none}}
+@media (prefers-reduced-motion: reduce){.edge,.node,.node .label,.node .who{transition:none}}
 </style>
 </head>
 <body>
@@ -486,13 +489,19 @@ function draw() {
       }
       const t = el("text", {x: lx, y: ly, "text-anchor": anchor, class: "label"}, g);
       n.label.forEach((line, i) => { el("tspan", {x: lx, dy: i ? 15 : 0}, t).textContent = line; });
-      if (n.type !== "tangent" && n.type !== "tension" && n.who.length)
-        el("text", {x: lx, y: ly + n.label.length * 15, "text-anchor": anchor, class: "who"}, g).textContent = n.who.join(" · ");
+      // on hover the label grows away from its mark, so the origin sits on the side nearest the mark
+      const above = anchor === "middle" && ly < n.y;
+      const oy = anchor === "middle" ? (above ? ly + (n.label.length - 1) * 15 + 4 : ly - 12) : ly + (n.label.length - 1) * 7.5 - 4;
+      t.style.transformOrigin = `${lx}px ${oy}px`;
+      if (n.type !== "tangent" && n.type !== "tension" && n.who.length) {
+        const w = el("text", {x: lx, y: ly + n.label.length * 15, "text-anchor": anchor, class: "who"}, g);
+        w.textContent = n.who.join(" · "); w.style.transformOrigin = `${lx}px ${oy}px`;
+      }
     }
     nodeEls[n.id] = g;
     g.addEventListener("click", () => select(n.id, true));
     g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id, true); } });
-    g.addEventListener("mouseenter", () => focusOn(n.id));
+    g.addEventListener("mouseenter", () => { if (g.nextSibling) g.parentNode.appendChild(g); focusOn(n.id); });  // bring the hovered mark to the front
     g.addEventListener("mouseleave", () => focusOn(current));
   });
   applyLayers(); applyPerson();
