@@ -144,7 +144,9 @@ header p{margin:0;color:var(--muted);max-width:68ch}
 .dot.padlet{background:var(--accent)} .dot.discussion{border-style:dashed} .dot.project{background:var(--gold);border-color:var(--gold)}
 .dot.tangent{border-color:var(--tangent);border-style:dashed;width:8px;height:8px}
 .dot.tension{background:var(--gold);border-color:var(--gold);border-radius:1px;transform:rotate(45deg);width:9px;height:9px}
-.sectionhead{font-family:var(--display);font-weight:400;font-size:30px;margin:40px 0 0}
+.every{margin-top:32px}
+.every summary{cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.panel .counts{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);margin:10px 0}
 
 /* editor tools */
 .editor{margin-top:34px;border:1px dashed var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
@@ -175,7 +177,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
   <div class="controls" role="group" aria-label="Map layers and filters">
     <label class="toggle"><input type="checkbox" id="tg-link" checked><span class="sw c"></span>Connections</label>
     <label class="toggle"><input type="checkbox" id="tg-tension" checked><span class="sw x"></span>Tensions</label>
-    <label class="toggle"><input type="checkbox" id="tg-tangent" checked><span class="sw t"></span>Tangents</label>
+    <label class="toggle"><input type="checkbox" id="tg-tangent"><span class="sw t"></span>Tangents</label>
     <div class="people" id="people"><span class="lbl">Contributed by</span></div>
   </div>
 
@@ -187,8 +189,10 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
 
-  <h2 class="sectionhead">Every card, by site</h2>
-  <div class="index" id="index"></div>
+  <details class="every" id="every">
+    <summary>Every card as a list</summary>
+    <div class="index" id="index"></div>
+  </details>
 
   <footer id="footer"></footer>
   <p class="type-credit">Titles are set in <a href="https://www.theleagueofmoveabletype.com/the-neue-black">The Neue Black</a>, a typeface by Tré Seals of <a href="https://www.vocaltype.co">Vocal Type</a>, based on the signs of the Chicago Freedom Movement.</p>
@@ -426,7 +430,7 @@ const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS,
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
 const inlineEm = s => esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>");
 let edgeEls = [], nodeEls = {}, current = "CENTRE", personFilter = null;
-const layers = {link: true, tension: true, tangent: true};
+const layers = {link: true, tension: true, tangent: false};  // tangents start hidden to keep the first view quiet
 const edgeType = (A, B) => (A.type === "tension" || B.type === "tension") ? "tension"
   : (A.type === "tangent" || B.type === "tangent") ? "tangent" : (A.type === "centre" || B.type === "centre") ? "spoke" : "link";
 
@@ -600,25 +604,17 @@ function select(id, scroll) {
 }
 function bindPanel() { panel.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go, true))); }
 function overview() {
-  const deg = {}; edgeEls.forEach(e => { if (e.type === "link") { deg[e.a] = (deg[e.a] || 0) + 1; deg[e.b] = (deg[e.b] || 0) + 1; } });
-  const ranked = Object.entries(deg).sort((x, y) => y[1] - x[1]);
   const count = f => N.filter(f).length;
   const placed = count(n => n.site && n.site !== "method"), ring = count(n => n.site === "method");
-  let most = "";
-  if (ranked.length) { const top = ranked[0][1]; most = `<div><dt>Most connected</dt><dd>${ranked.filter(r => r[1] === top).map(r => esc(byId[r[0]].title)).join("; ")} (${top} links each, not counting tensions and tangents).</dd></div>`; }
   return `<div class="kind"><span class="pill">Centre</span><span>Overview</span></div>
   <h2>${esc(SET.centre_title || "Endarkened Co-Composition")}</h2>
-  ${SET.centre_question ? `<p class="q">${esc(SET.centre_question)}</p>` : ""}
-  <dl>
-   <div><dt>On the map</dt><dd>${placed} questions placed by site and ${ring} about Endarkened Co-Composition itself, of which ${count(n => n.type === "discussion")} emerged in discussion. ${count(n => n.type === "tension")} tensions and ${count(n => n.type === "tangent")} tangents.</dd></div>
-   ${most}
-   <div><dt>Start here</dt><dd>Select any mark to open its card. <a href="how-to-read.html">How to read this map</a></dd></div>
-  </dl>
+  <p class="counts">${placed + ring} questions · ${count(n => n.type === "tension")} tensions · ${count(n => n.type === "tangent")} tangents</p>
   ${SET.centre_note ? `<p class="note">${esc(SET.centre_note)}</p>` : ""}`;
 }
 
 function drawIndex() {
   const idx = document.getElementById("index"); idx.innerHTML = "";
+  if (matchMedia("(max-width: 900px)").matches) document.getElementById("every").open = true;
   const groups = [["clinic", n => n.sites && n.sites[0] === "clinic"], ["community", n => n.sites && n.sites[0] === "community"],
     ["archive", n => n.sites && n.sites[0] === "archive"], ["academy", n => n.sites && n.sites[0] === "academy"],
     ["method", n => n.site === "method"], ["rim", n => n.type === "tension" || n.type === "tangent"]];
