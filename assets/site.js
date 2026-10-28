@@ -35,12 +35,14 @@ function chrome() {
   if (foot) foot.innerHTML = `
     <div class="gutter"><div class="inner"><footer class="site">
       <div><div class="mark">One Long Thread</div>Led by Dr Nik Gre Lassiter · <a href="https://studiogre.studio">Studio Gre</a></div>
-      <div class="funders"><span class="label">Funded by</span>
-        <img class="logo on-dark" src="images/logos/ukri-ahrc.png" alt="UKRI Arts and Humanities Research Council">
-        <img class="logo on-light" src="images/logos/university-of-southampton.png" alt="University of Southampton">
-      </div>
-      <div class="funders"><span class="label">Collaborating institution</span>
-        <img class="logo on-light" src="images/logos/cuny-graduate-center.png" alt="CUNY Graduate Center">
+      <div class="partners">
+        <div class="funders"><span class="label">Funded by</span><div class="logos">
+          <img class="logo on-dark" src="images/logos/ukri-ahrc.png" alt="UKRI Arts and Humanities Research Council"></div></div>
+        <div class="funders"><span class="label">Hosting institution</span><div class="logos">
+          <img class="logo on-light" src="images/logos/university-of-southampton.png" alt="University of Southampton"></div></div>
+        <div class="funders"><span class="label">Collaborating institutions</span><div class="logos">
+          <img class="logo on-light" src="images/logos/university-of-edinburgh.png" alt="The University of Edinburgh">
+          <img class="logo on-light" src="images/logos/cuny-graduate-center.png" alt="CUNY Graduate Center"></div></div>
       </div>
       <p class="type-credit">Headings are set in <a href="https://www.theleagueofmoveabletype.com/the-neue-black">The Neue Black</a>, a typeface by Tré Seals of <a href="https://www.vocaltype.co">Vocal Type</a>, based on the signs of the Chicago Freedom Movement.</p>
     </footer></div></div>`;

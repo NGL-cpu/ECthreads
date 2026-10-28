@@ -300,3 +300,11 @@ h1:not(.page){font-size:clamp(37px,6.9vw,94px)}
 .book-intro p{margin:0 0 .7em}
 /* cover titles: narrower so long single words fit whole, never split mid-word */
 .book .mt{overflow-wrap:normal;word-break:normal;font-variation-settings:"wdth" 0;font-size:clamp(18px,1.8vw,23px)}
+/* every logo sits at the same height on the same padding, so they read as equal */
+.funders img.logo.on-light,.funders img.logo.on-dark{padding:6px 10px}
+/* funders and institutions: each group a label over its logos, groups side by side */
+.partners{display:flex;flex-wrap:wrap;gap:18px 40px;align-items:flex-start;margin:6px 0}
+footer.site .partners{flex-basis:100%}
+.partners .funders{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0}
+.partners .logos{display:flex;flex-wrap:wrap;gap:12px}
+.prose .partners{margin:12px 0 18px}
