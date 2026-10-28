@@ -162,6 +162,8 @@ a.strand:hover h3{color:var(--gold)}
 footer.site{border-top:1px solid var(--line);padding-block:34px 48px;color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
 footer.site .mark{font-size:16px;color:var(--fg)}
 footer.site a{color:var(--muted)}
+footer.site .type-credit{flex-basis:100%;margin:6px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:13px;max-width:none}
+footer.site .type-credit a{color:var(--fg)}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto}}
 /* inner pages: the thread runs along the foot of the header, under the title */
 .hero.sub{padding-bottom:64px}
