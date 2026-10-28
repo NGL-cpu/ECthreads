@@ -39,7 +39,7 @@ function chrome() {
         <img class="logo on-dark" src="images/logos/ukri-ahrc.png" alt="UKRI Arts and Humanities Research Council">
         <img class="logo on-light" src="images/logos/university-of-southampton.png" alt="University of Southampton">
       </div>
-      <div class="funders"><span class="label">In partnership with</span>
+      <div class="funders"><span class="label">Collaborating institution</span>
         <img class="logo on-light" src="images/logos/cuny-graduate-center.png" alt="CUNY Graduate Center">
       </div>
       <p class="type-credit">Headings are set in <a href="https://www.theleagueofmoveabletype.com/the-neue-black">The Neue Black</a>, a typeface by Tré Seals of <a href="https://www.vocaltype.co">Vocal Type</a>, based on the signs of the Chicago Freedom Movement.</p>
