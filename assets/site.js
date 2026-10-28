@@ -97,7 +97,7 @@ const RENDER = {
       <li><span class="yr">${esc(r.year)}</span>
       <span><span class="t">${r.link ? link(r.link, r.title) : esc(r.title)}</span>
       <span class="v">${esc([r.authors, r.venue].filter(Boolean).join(" · "))}</span></span>
-      <span class="st">${esc(r.type)}${r.status ? " · " + esc(r.status) : ""}</span></li>`).join("")}</ul>`;
+      <span class="st">${esc([r.type, r.status].filter(Boolean).join(" · "))}</span></li>`).join("")}</ul>`;
   },
   gatherings(rows) {
     return `<div class="cards">${rows.filter(shown).map(r => `
