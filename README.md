@@ -1,6 +1,6 @@
-# THREADS
+# One Long Thread
 
-Testimony · Healing · Repair · Embodied Archives · Dreaming · the Sonic (working name)
+Testimony · Healing · Repair · Embodied Archives · Dreaming · the Sonic
 
 The public website for a research and composition project on gynaecological racism, sound and the archive, held by the life of Anarcha. Led by Dr Nik Gre Lassiter (Studio Gre), funded by the Arts and Humanities Research Council at the University of Southampton.
 

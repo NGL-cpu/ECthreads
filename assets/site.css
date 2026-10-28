@@ -1,4 +1,4 @@
-/* THREAD · shared styles
+/* One Long Thread · shared styles
    Layout: one long thread runs through the site, stitching each section to the next.
    Palette "Red clay and linen": linen ground, coffee ink, a deep-peach thread and maroon labels.
    Light first; dark (coffee ground, guave labels) follows the visitor's device.
@@ -289,3 +289,5 @@ h1 em,h1 i,h2 em,h2 i{font-family:var(--display);font-style:italic;font-weight:4
 .book .mt{font-variation-settings:"wdth" 30;letter-spacing:.01em}
 /* homepage title, 20% smaller than the other display sizes allow */
 h1:not(.page){font-size:clamp(37px,6.9vw,94px)}
+/* headings in the narrow left column of two-column sections run a little more condensed, so long words fit */
+.two h2{font-variation-settings:"wdth" 20}
