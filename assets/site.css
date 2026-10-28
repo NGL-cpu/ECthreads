@@ -295,3 +295,4 @@ h1:not(.page){font-size:clamp(37px,6.9vw,94px)}
 /* a longer quoted framing in a document reads upright, not italic */
 .doc blockquote.framing{font-style:normal;font-family:var(--body);font-size:inherit}
 .doc blockquote.framing p{margin:0 0 .8em}
+.doc p.source-note{font-size:14px;color:var(--muted);margin-top:-6px}
