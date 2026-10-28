@@ -160,7 +160,9 @@ const AFTER = {
     items.forEach(r => { const k = r.event || "Archive"; if (!byEvent[k]) { byEvent[k] = []; events.push(k); } byEvent[k].push(r); });
     const reader = el.querySelector(".reader"), lb = el.querySelector(".lightbox"), books = [...el.querySelectorAll(".book")];
     const narrow = matchMedia("(max-width: 760px)");
-    let ev = -1, spread = 0, lbIdx = 0;
+    let ev = -1, spread = 0, lbIdx = 0, books_ = {};
+    // optional introductions for each book, from data/archive-books.csv (event, dates, place, summary, show)
+    sheet("archive-books").then(rows => { rows.filter(shown).forEach(r => { books_[r.event] = r; }); if (ev >= 0 && !reader.hidden) renderReader(); }).catch(() => {});
     const kindOf = r => (r.kind || "").toLowerCase();
     const media = (r, i) => {
       if (kindOf(r) === "photo" && r.file) return `<button class="zoom" type="button" data-idx="${i}" aria-label="View larger: ${esc(r.title)}"><img src="${esc(r.file)}" alt="${esc(r.alt || r.title)}" loading="lazy"></button>`;
@@ -175,10 +177,11 @@ const AFTER = {
       const pages = list.slice(spread * per, spread * per + per);
       reader.innerHTML = `
         <div class="reader-head">
-          <div><div class="label">No. ${String(ev + 1).padStart(2, "0")} · ${esc([list[0].date, list[0].place].filter(Boolean).join(" · "))}</div>
+          <div><div class="label">No. ${String(ev + 1).padStart(2, "0")} · ${esc(books_[events[ev]] ? [books_[events[ev]].dates, books_[events[ev]].place].filter(Boolean).join(" · ") : [list[0].date, list[0].place].filter(Boolean).join(" · "))}</div>
           <h2>${esc(events[ev])}</h2></div>
           <button class="reader-close" type="button" aria-label="Close this book">Close</button>
         </div>
+        ${books_[events[ev]] && books_[events[ev]].summary && spread === 0 ? `<div class="book-intro">${paras(books_[events[ev]].summary)}</div>` : ""}
         <div class="spread${per === 1 ? " single" : ""}">
           ${pages.map((r, j) => { const i = spread * per + j; return `
             <figure class="bpage"><div class="ph">${media(r, i)}</div>

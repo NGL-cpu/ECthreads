@@ -19,6 +19,7 @@ Most lists on the site come from the spreadsheets in `data/`. Edit one in Excel,
 | `opera-updates.csv` | The Opera, “Notes and recordings” | |
 | `screenings.csv` | The Film, “Where to see it” | |
 | `archive.csv` | Archive | Each `event` becomes a photo book; rows with the same event go in the same book, in the order listed. `cover` = yes picks the cover photo. `kind` is photo, audio, video or document; `file` is a path in `images/` or a web address |
+| `archive-books.csv` | Archive | One row per photo book: `event` (exactly as in `archive.csv`), `dates`, `place` and a `summary` shown at the start of the book. Separate paragraphs with a line break |
 
 Every spreadsheet has a `show` column. Leave it blank to show a row, or write `no` to keep it in the file without showing it on the site.
 
