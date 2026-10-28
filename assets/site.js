@@ -6,7 +6,8 @@
 const NAV = [
   ["about.html", "About"], ["method.html", "Method"], ["gatherings.html", "Gatherings"],
   ["opera.html", "Opera"], ["film.html", "Film"], ["archive.html", "Archive"],
-  ["people.html", "People"], ["publications.html", "Publications"], ["timeline.html", "Timeline"]
+  ["people.html", "People"], ["publications.html", "Publications"], ["timeline.html", "Timeline"],
+  ["contact.html", "Contact"]
 ];
 const NOTICE = "This site is in development.";
 
@@ -95,7 +96,7 @@ const RENDER = {
     const list = (title, items, cls) => items.length ? `<div class="associates ${cls}"><h2>${title}</h2><ul>${items.map(r => `
       <li>${r.link ? link(r.link, r.name) : esc(r.name)}${r.affiliation && r.affiliation !== r.name ? `<span>${esc(r.affiliation)}</span>` : ""}</li>`).join("")}</ul></div>` : "";
     let h = `<div class="cards">${team.map(r => `
-      <article class="card person"><h3>${esc(r.name)}${yes(r.steering) ? `<span class="star" aria-label="also part of the steering group">*</span>` : ""}</h3><div class="role">${esc(r.role)}</div>
+      <article class="card person"><h3>${r.name_link ? link(r.name_link, r.name, "name") : esc(r.name)}${yes(r.steering) ? `<span class="star" aria-label="also part of the steering group">*</span>` : ""}</h3><div class="role">${esc(r.role)}</div>
       ${r.affiliation ? `<div class="meta">${esc(r.affiliation)}</div>` : ""}${r.bio ? paras(r.bio) : ""}
       ${link(r.link, r.link_text || "More", "more")}</article>`).join("")}</div>`;
     if (starred) h += `<p class="star-note">* Also part of the steering group.</p>`;
