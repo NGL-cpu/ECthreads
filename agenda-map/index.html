@@ -97,7 +97,7 @@ header p{margin:0;color:var(--muted);max-width:68ch}
 .edge.link.hot,.edge.spoke.hot{stroke:var(--accent)}
 .node{cursor:pointer;transition:opacity .2s}
 .node .shape{stroke-width:2}
-.n-padlet .shape{fill:var(--accent);stroke:var(--accent)}
+.n-written .shape{fill:var(--accent);stroke:var(--accent)}
 .n-discussion .shape{fill:var(--surface);stroke:var(--accent);stroke-dasharray:3 2.5}
 .n-seed .shape{fill:var(--surface);stroke:var(--accent)}
 .n-project .shape{fill:var(--gold);stroke:var(--gold)}
@@ -144,7 +144,7 @@ header p{margin:0;color:var(--muted);max-width:68ch}
 .li:hover{background:var(--surface-2)}
 .li i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);display:block}
 .dot{width:10px;height:10px;border-radius:50%;margin-top:6px;border:2px solid var(--accent)}
-.dot.padlet{background:var(--accent)} .dot.discussion{border-style:dashed} .dot.project{background:var(--gold);border-color:var(--gold)}
+.dot.written{background:var(--accent)} .dot.discussion{border-style:dashed} .dot.project{background:var(--gold);border-color:var(--gold)}
 .dot.tangent{border-color:var(--tangent);border-style:dashed;width:8px;height:8px}
 .dot.tension{background:var(--gold);border-color:var(--gold);border-radius:1px;transform:rotate(45deg);width:9px;height:9px}
 .every{margin-top:32px}
@@ -253,7 +253,7 @@ const SITES = {
 };
 const BOUNDARY = {"academy/clinic": -90, "clinic/community": 0, "community/archive": 90, "archive/academy": 180};
 const TYPES = {
-  padlet: "Padlet card", discussion: "Emerged in discussion", seed: "Seed example", project: "Project strand",
+  written: "Written on the day", discussion: "Emerged in discussion", seed: "Seed example", project: "Project strand",
   tension: "Tension", tangent: "Tangent"
 };
 const FIELD_LABELS = [["where", "Where it would run"], ["ec_adds", "What Endarkened Co-Composition adds"], ["on_paper", "On paper"], ["with_whom", "With whom"], ["risks", "Risks"]];
@@ -322,12 +322,12 @@ function build(raw) {
     if (!id) { problems.push(`cards.csv row ${rowNo} has no id, so it was skipped.`); return; }
     if (seen.has(id)) { problems.push(`The id “${id}” is used twice in cards.csv. Only the first was kept.`); return; }
     seen.add(id);
-    const type = (r.type || "").toLowerCase();
-    if (!TYPES[type]) problems.push(`Card ${id}: type “${r.type}” isn’t recognised. Use padlet, discussion, seed, project, tension or tangent.`);
+    const type = ((r.type || "").toLowerCase() === "padlet") ? "written" : (r.type || "").toLowerCase();
+    if (!TYPES[type]) problems.push(`Card ${id}: type “${r.type}” isn’t recognised. Use written, discussion, seed, project, tension or tangent.`);
     if (!r.title) problems.push(`Card ${id} has no title.`);
     const who = (r.contributors || "").split(/[;,]/).map(s => s.trim()).filter(Boolean);
     const n = {
-      id, type: TYPES[type] ? type : "padlet", title: r.title || id, question: r.question || "",
+      id, type: TYPES[type] ? type : "written", title: r.title || id, question: r.question || "",
       label: r.label ? r.label.split("/").map(s => s.trim()).filter(Boolean) : wrapLabel(r.title || id),
       who, fields: r, note: r.note || "", source: r.source || "",
       manualA: r.angle !== "" && r.angle !== undefined && !isNaN(+r.angle) ? +r.angle : null,
@@ -516,7 +516,7 @@ function legendSwatch(type, ring) {
   return s;
 }
 const KEY = [
-  ["padlet", "Padlet card", "A question posted by a participant on the research-agenda Padlet."],
+  ["written", "Written on the day", "A question a participant wrote on the shared board during the symposium."],
   ["discussion", "Emerged in discussion", "A question raised aloud on the day and worded from the transcript. Provisional until its contributors confirm it."],
   ["seed", "Seed example", "The worked example used to show how a card is filled in. Open to correction."],
   ["project", "Project strand", "A question already being pursued within CURED."],
