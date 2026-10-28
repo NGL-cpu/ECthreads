@@ -11,19 +11,19 @@
 /* Layout: circle-and-cross field (after the symposium's cosmogram walk). EC at the centre, a method ring around it,
    four sites as quadrants, tensions on the rim, tangents in orbit. Detail panel beside on desktop, below on phones. */
 :root{
-  --bg:#171a2b; --surface:#1f2339; --surface-2:#262b45; --fg:#ece8dd; --muted:#a3a7bb; --line:#3b4162;
-  --accent:#9fd3d0; --accent-ink:#0f2a2b; --gold:#dcb75e; --tangent:#b9a8de; --warn:#f0a07a;
+  --bg:#efe6d3; --surface:#f7f0e1; --surface-2:#e4d8bf; --fg:#2c1912; --muted:#6b5544; --line:#d0c1a4;
+  --accent:#5e2a25; --accent-ink:#efe6d3; --gold:#944423; --tangent:#6e6224; --warn:#a3361f;
   --display:"Newsreader", Georgia, "Times New Roman", serif;
   --body:"Public Sans", "Segoe UI", system-ui, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
-  color-scheme:dark;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
-  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
-  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light } }
-:root[data-theme="light"]{
-  --bg:#f2f4f6; --surface:#ffffff; --surface-2:#e9edf2; --fg:#1b1f33; --muted:#565c74; --line:#c8cedb;
-  --accent:#23727a; --accent-ink:#ffffff; --gold:#9a6f12; --tangent:#6f58a3; --warn:#b3471b; color-scheme:light }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#221410; --surface:#301e18; --surface-2:#3b2620; --fg:#ead9b9; --muted:#b29d86; --line:#4d352d;
+  --accent:#c9a77c; --accent-ink:#221410; --gold:#d98a55; --tangent:#b9a75e; --warn:#f0a07a; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#221410; --surface:#301e18; --surface-2:#3b2620; --fg:#ead9b9; --muted:#b29d86; --line:#4d352d;
+  --accent:#c9a77c; --accent-ink:#221410; --gold:#d98a55; --tangent:#b9a75e; --warn:#f0a07a; color-scheme:dark }
 
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -176,8 +176,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
       <h3>What the lines mean</h3>
       <ul>
         <li><strong>Solid lines</strong> join questions that share a concern. Select a question to read why.</li>
-        <li><strong>Gold dotted lines</strong> run from a tension to the questions it pulls on.</li>
-        <li><strong>Lilac dashed lines</strong> tie a tangent to the questions it speaks to.</li>
+        <li><strong>Rust dotted lines</strong> run from a tension to the questions it pulls on.</li>
+        <li><strong>Olive dashed lines</strong> tie a tangent to the questions it speaks to.</li>
       </ul>
       <p>Position is not a ranking. Nearness to the centre says what kind of question it is, not how important it is. A question with many lines is one that many others lean on, which often makes it a good anchor for a study.</p>
     </section>

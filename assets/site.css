@@ -1,18 +1,19 @@
 /* THREAD · shared styles
-   Layout: one long gold thread runs through the site, stitching each section to the next.
-   Night ground, haint-blue light; light theme follows the visitor's device. */
+   Layout: one long thread runs through the site, stitching each section to the next.
+   Palette "Red clay and linen": linen ground, coffee ink, a deep-peach thread and maroon labels.
+   Light first; dark (coffee ground, guave labels) follows the visitor's device.
+   Token names are historical: --gold is the thread colour, --haint the label colour. */
 :root{
-  --bg:#13151f; --bg-2:#1a1d2b; --fg:#efe9dc; --muted:#a29fae; --line:#2f3346;
-  --gold:#d8b25a; --haint:#9fd3d0; --ink:#13151f;
+  --bg:#efe6d3; --bg-2:#e4d8bf; --fg:#2c1912; --muted:#6b5544; --line:#d0c1a4; --gold:#944423; --haint:#5e2a25; --ink:#efe6d3;
   --display:"Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --body:"Work Sans", "Helvetica Neue", Arial, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
-  color-scheme:dark;
+  color-scheme:light;
 }
-@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
-  --bg:#f4f1ea; --bg-2:#ebe6db; --fg:#191b26; --muted:#5d5a66; --line:#d6d0c2; --gold:#9b7419; --haint:#2b7b80; --ink:#f4f1ea; color-scheme:light } }
-:root[data-theme="light"]{
-  --bg:#f4f1ea; --bg-2:#ebe6db; --fg:#191b26; --muted:#5d5a66; --line:#d6d0c2; --gold:#9b7419; --haint:#2b7b80; --ink:#f4f1ea; color-scheme:light }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#221410; --bg-2:#301e18; --fg:#ead9b9; --muted:#b29d86; --line:#47302a; --gold:#d98a55; --haint:#b9a75e; --ink:#221410; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#221410; --bg-2:#301e18; --fg:#ead9b9; --muted:#b29d86; --line:#47302a; --gold:#d98a55; --haint:#b9a75e; --ink:#221410; color-scheme:dark }
 
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -171,7 +172,7 @@ footer.site a{color:var(--muted)}
 footer.site .funders img.logo{height:36px}
 .logo-text{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);padding:8px 12px;border-radius:2px}
 /* each logo sits on the backing its colours were made for, so it reads in light and dark */
-.funders img.logo.on-dark{background:#13151f;padding:8px 12px;border-radius:3px;box-sizing:content-box}
+.funders img.logo.on-dark{background:#2c1912;padding:8px 12px;border-radius:3px;box-sizing:content-box}
 .funders img.logo.on-light{background:#ffffff;padding:4px 8px;border-radius:3px;box-sizing:content-box}
 .prose p.aside{border-left:2px solid var(--gold);padding-left:14px;color:var(--muted);font-size:15px}
 /* long documents (e.g. the symposium synthesis) */
@@ -215,18 +216,18 @@ footer.site .funders img.logo{height:36px}
 
 /* ---------- Archive: photo books ---------- */
 /* paper stays paper in both themes, like a real book */
-:root{--paper:#f7f3ea;--paper-2:#ece6d8;--paper-ink:#1d1c24;--paper-muted:#6a6572}
+:root{--paper:#f9f4e8;--paper-2:#e9dec6;--paper-ink:#2c1912;--paper-muted:#6b5544}
 .shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:44px 34px;perspective:1400px;padding:8px 0 4px}
 .book{all:unset;cursor:pointer;display:grid;gap:12px;align-content:start}
 .book:focus-visible .cover{outline:2px solid var(--haint);outline-offset:4px}
 .book .cover{position:relative;display:block;aspect-ratio:3/4;border-radius:2px 7px 7px 2px;background:var(--bg-2);transform-origin:left center;transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s;box-shadow:2px 3px 0 -1px var(--paper-2),4px 6px 0 -2px var(--paper),10px 14px 28px rgba(0,0,0,.35)}
 .book .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .book .cover::before{content:"";position:absolute;inset:0 auto 0 0;width:16px;z-index:2;border-radius:2px 0 0 2px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.12) 55%,rgba(0,0,0,0))}
-.book .cover::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(180deg,rgba(10,10,18,.62) 0%,rgba(10,10,18,0) 34%,rgba(10,10,18,0) 66%,rgba(10,10,18,.7) 100%)}
-.book .masthead{position:absolute;z-index:3;top:16px;left:26px;right:16px;display:grid;gap:6px;color:#f7f3ea}
+.book .cover::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;background:linear-gradient(180deg,rgba(34,20,16,.62) 0%,rgba(34,20,16,0) 34%,rgba(34,20,16,0) 66%,rgba(34,20,16,.7) 100%)}
+.book .masthead{position:absolute;z-index:3;top:16px;left:26px;right:16px;display:grid;gap:6px;color:#f9f4e8}
 .book .issue{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
 .book .mt{font-family:var(--display);font-size:clamp(19px,1.9vw,24px);line-height:1.05;text-transform:uppercase;letter-spacing:.03em;text-wrap:balance;overflow-wrap:anywhere}
-.book .foot{position:absolute;z-index:3;left:26px;right:16px;bottom:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#f7f3ea;opacity:.9}
+.book .foot{position:absolute;z-index:3;left:26px;right:16px;bottom:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#f9f4e8;opacity:.9}
 .book .book-title{font-family:var(--display);font-size:22px;line-height:1.2}
 .book .book-meta{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--haint)}
 .book:hover .cover,.book.open .cover{transform:rotateY(-14deg);box-shadow:2px 3px 0 -1px var(--paper-2),4px 6px 0 -2px var(--paper),18px 18px 34px rgba(0,0,0,.42)}
@@ -246,7 +247,7 @@ footer.site .funders img.logo{height:36px}
 .bpage .ph{display:grid;place-items:center;min-height:0}
 .bpage .zoom{all:unset;cursor:zoom-in;display:block;max-width:100%;max-height:100%}
 .bpage .zoom img{display:block;max-width:100%;max-height:clamp(240px,38vw,470px);width:auto;height:auto;margin:0 auto;box-shadow:0 1px 3px rgba(0,0,0,.18)}
-.bpage .zoom:focus-visible{outline:2px solid #23727a;outline-offset:4px}
+.bpage .zoom:focus-visible{outline:2px solid #5e2a25;outline-offset:4px}
 .bpage figcaption{font-family:var(--display);font-size:16px;line-height:1.4;color:var(--paper-ink)}
 .bpage figcaption b{font-weight:600}
 .bpage .credit,.lightbox .credit{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--paper-muted);margin-top:4px}
@@ -259,7 +260,7 @@ footer.site .funders img.logo{height:36px}
 .reader-nav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
 
 .lightbox{border:none;padding:18px 18px 14px;max-width:min(1120px,90vw);max-height:90vh;background:var(--paper);color:var(--paper-ink);border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:auto}
-.lightbox::backdrop{background:rgba(8,9,16,.72)}
+.lightbox::backdrop{background:rgba(34,20,16,.72)}
 .lightbox figure{margin:0}
 .lightbox img{display:block;max-width:min(1080px,86vw);max-height:72vh;width:auto;height:auto;margin:0 auto}
 .lightbox figcaption{font-family:var(--display);font-size:16px;line-height:1.4;margin-top:12px;max-width:72ch}
