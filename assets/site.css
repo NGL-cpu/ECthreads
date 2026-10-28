@@ -268,3 +268,22 @@ footer.site .funders img.logo{height:36px}
 .lightbox button{color:var(--paper-ink);border-color:rgba(0,0,0,.2)}
 .lightbox .lb-close{position:absolute;top:10px;right:10px;font-size:18px;line-height:1;padding:6px 10px;background:var(--paper)}
 @media (prefers-reduced-motion: reduce){.book .cover{transition:none}.book:hover .cover,.book.open .cover{transform:none}}
+
+/* ---------- Type: The Neue Black (Tré Seals, Vocal Type; SIL Open Font License) for the voice,
+   Newsreader for reading. The Neue Black has one heavy weight and a width axis (0 extra condensed – 100 expanded). ---------- */
+@font-face{font-family:"The Neue Black";src:url("../fonts/TheNeueBlackVF.woff2") format("woff2"),url("../fonts/TheNeueBlackVF.woff") format("woff");font-weight:400 900;font-display:swap}
+:root{
+  --voice:"The Neue Black","Arial Black",Impact,sans-serif;
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+}
+body{font-size:18px;line-height:1.62}
+.mark,h1,h2,.book .mt,.anarcha .name{font-family:var(--voice);font-weight:400;font-synthesis:none;font-variation-settings:"wdth" 40;letter-spacing:0}
+.mark{font-size:20px;letter-spacing:.14em;font-variation-settings:"wdth" 70}
+h1{line-height:.96;letter-spacing:-.005em}
+h2{line-height:1.02;font-variation-settings:"wdth" 50}
+/* The Neue Black has no italic, so emphasised words in headings switch to Newsreader italic */
+h1 em,h1 i,h2 em,h2 i{font-family:var(--display);font-style:italic;font-weight:400;font-variation-settings:normal;letter-spacing:-.01em}
+.book .mt{font-variation-settings:"wdth" 30;letter-spacing:.01em}
+/* homepage title, 20% smaller than the other display sizes allow */
+h1:not(.page){font-size:clamp(37px,6.9vw,94px)}

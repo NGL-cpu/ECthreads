@@ -33,5 +33,6 @@ Rows appear in the order they are listed.
 - `assets/site.js`: the menu, footer and spreadsheet lists (edit `NAV` there to change the menu)
 - `agenda-map/`: the interactive Listening Across research agenda map. It has its own spreadsheets (`cards.csv`, `links.csv`, `people.csv`, `settings.csv`) and lays itself out from them. `how-to-read.html` is its reading guide. See the Word guide “Updating the Agenda Map”
 - `images/`: photographs and other media for the archive
+- `fonts/`: The Neue Black by Tré Seals (Vocal Type), used for the wordmark and headings. It is free under the SIL Open Font License (`fonts/OFL.txt`). Reading text is Newsreader and labels are IBM Plex Mono, both loaded from Google Fonts
 - `images/logos/`: funder logos (`ukri-ahrc.png`, the white UKRI AHRC logo, shown on a dark backing; `university-of-southampton.png`, shown on a white backing)
 - `.nojekyll`: tells GitHub Pages to serve the files exactly as they are

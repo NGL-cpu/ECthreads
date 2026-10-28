@@ -25,14 +25,15 @@
   --bg:#221410; --surface:#301e18; --surface-2:#3b2620; --fg:#ead9b9; --muted:#b29d86; --line:#4d352d;
   --accent:#c9a77c; --accent-ink:#221410; --gold:#d98a55; --tangent:#b9a75e; --warn:#f0a07a; color-scheme:dark }
 
+@font-face{font-family:"The Neue Black";src:url("../fonts/TheNeueBlackVF.woff2") format("woff2"),url("../fonts/TheNeueBlackVF.woff") format("woff");font-weight:400 900;font-display:swap}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
 .wrap{max-width:1500px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
 header{display:grid;gap:10px;max-width:880px;margin-bottom:22px}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.4vw,50px);line-height:1.08;margin:0;text-wrap:balance}
-h1 em{color:var(--accent)}
+h1{font-family:"The Neue Black","Arial Black",Impact,sans-serif;font-weight:400;font-synthesis:none;font-variation-settings:"wdth" 40;font-size:clamp(30px,4.4vw,50px);line-height:1.04;margin:0;text-wrap:balance}
+h1 em{color:var(--accent);font-family:var(--display);font-style:italic;font-weight:400;font-variation-settings:normal}
 header p{margin:0;color:var(--muted);max-width:68ch}
 .jump{font-size:13px;color:var(--accent)}
 
