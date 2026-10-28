@@ -27,6 +27,7 @@
 
 @font-face{font-family:"The Neue Black";src:url("../fonts/TheNeueBlackVF.woff2") format("woff2"),url("../fonts/TheNeueBlackVF.woff") format("woff");font-weight:400 900;font-display:swap}
 .type-credit{margin-top:10px;color:var(--muted);font-size:13px;max-width:80ch}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
@@ -203,5 +204,17 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;max-width:80ch}
   <p style="margin-top:28px"><a class="jump" href="index.html">← Back to the map</a></p>
   <p class="type-credit">Titles are set in <a href="https://www.theleagueofmoveabletype.com/the-neue-black">The Neue Black</a>, a typeface by Tré Seals of <a href="https://www.vocaltype.co">Vocal Type</a>, based on the signs of the Chicago Freedom Movement.</p>
 </div>
+<script>
+/* links to other websites open in a new tab (checked again whenever the page adds content) */
+function externalLinks(root) {
+  (root || document).querySelectorAll("a[href^='http']").forEach(a => {
+    if (a.host === location.host || a.dataset.ext) return;
+    a.target = "_blank"; a.rel = "noopener"; a.dataset.ext = "1";
+    const s = document.createElement("span"); s.className = "vh"; s.textContent = " (opens in a new tab)"; a.appendChild(s);
+  });
+}
+new MutationObserver(() => externalLinks()).observe(document.body, {childList: true, subtree: true});
+externalLinks();
+</script>
 </body>
 </html>

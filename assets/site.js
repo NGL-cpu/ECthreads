@@ -333,4 +333,13 @@ function logos() {
   });
 }
 
-chrome(); logos(); heroThread(); plates(); fillLists();
+/* links to other websites open in a new tab (checked again whenever the page adds content) */
+function externalLinks(root) {
+  (root || document).querySelectorAll("a[href^='http']").forEach(a => {
+    if (a.host === location.host || a.dataset.ext) return;
+    a.target = "_blank"; a.rel = "noopener"; a.dataset.ext = "1";
+    const s = document.createElement("span"); s.className = "vh"; s.textContent = " (opens in a new tab)"; a.appendChild(s);
+  });
+}
+new MutationObserver(() => externalLinks()).observe(document.body, {childList: true, subtree: true});
+chrome(); logos(); heroThread(); plates(); fillLists(); externalLinks();
