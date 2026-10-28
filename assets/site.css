@@ -291,3 +291,7 @@ h1 em,h1 i,h2 em,h2 i{font-family:var(--display);font-style:italic;font-weight:4
 h1:not(.page){font-size:clamp(37px,6.9vw,94px)}
 /* headings in the narrow left column of two-column sections run a little more condensed, so long words fit */
 .two h2{font-variation-settings:"wdth" 20}
+
+/* a longer quoted framing in a document reads upright, not italic */
+.doc blockquote.framing{font-style:normal;font-family:var(--body);font-size:inherit}
+.doc blockquote.framing p{margin:0 0 .8em}
