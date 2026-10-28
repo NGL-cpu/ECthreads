@@ -86,15 +86,20 @@ const RENDER = {
       ${vertical && r.detail ? `<div class="detail">${esc(r.detail)}</div>` : ""}</li>`).join("")}</ol>`;
   },
   people(rows) {
-    // anyone whose role is "Project Associate" is listed after the team, as names and organisations only
-    const visible = rows.filter(shown), isAssoc = r => /^project associate$/i.test((r.role || "").trim());
-    const team = visible.filter(r => !isAssoc(r)), assoc = visible.filter(isAssoc);
+    // the team as cards; then the steering group and project associates as quieter, centred lists of names and organisations.
+    // steering = yes marks a team member who is also in the steering group (shown with an asterisk)
+    const visible = rows.filter(shown), roleIs = (r, x) => (r.role || "").trim().toLowerCase() === x;
+    const team = visible.filter(r => !roleIs(r, "project associate") && !roleIs(r, "steering group"));
+    const steer = visible.filter(r => roleIs(r, "steering group")), assoc = visible.filter(r => roleIs(r, "project associate"));
+    const starred = team.some(r => yes(r.steering));
+    const list = (title, items, cls) => items.length ? `<div class="associates ${cls}"><h2>${title}</h2><ul>${items.map(r => `
+      <li>${r.link ? link(r.link, r.name) : esc(r.name)}${r.affiliation && r.affiliation !== r.name ? `<span>${esc(r.affiliation)}</span>` : ""}</li>`).join("")}</ul></div>` : "";
     let h = `<div class="cards">${team.map(r => `
-      <article class="card person"><h3>${esc(r.name)}</h3><div class="role">${esc(r.role)}</div>
+      <article class="card person"><h3>${esc(r.name)}${yes(r.steering) ? `<span class="star" aria-label="also part of the steering group">*</span>` : ""}</h3><div class="role">${esc(r.role)}</div>
       ${r.affiliation ? `<div class="meta">${esc(r.affiliation)}</div>` : ""}${r.bio ? paras(r.bio) : ""}
       ${link(r.link, r.link_text || "More", "more")}</article>`).join("")}</div>`;
-    if (assoc.length) h += `<div class="associates"><h2>Project Associates</h2><ul>${assoc.map(r => `
-      <li>${r.link ? link(r.link, r.name) : esc(r.name)}${r.affiliation && r.affiliation !== r.name ? `<span>${esc(r.affiliation)}</span>` : ""}</li>`).join("")}</ul></div>`;
+    if (starred) h += `<p class="star-note">* Also part of the steering group.</p>`;
+    h += list("Steering group", steer, "steering") + list("Project Associates", assoc, "");
     return h;
   },
   publications(rows) {

@@ -308,3 +308,7 @@ footer.site .partners{flex-basis:100%}
 .partners .funders{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0}
 .partners .logos{display:flex;flex-wrap:wrap;gap:12px}
 .prose .partners{margin:12px 0 18px}
+/* People: steering group list and the asterisk on team members who are also in it */
+.person h3 .star{color:var(--gold);margin-left:2px}
+.star-note{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);margin:14px 0 0}
+.associates.steering + .associates{margin-top:48px}
