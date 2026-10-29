@@ -74,6 +74,13 @@ async function sheet(name) {
   return parseCSV(await res.text());
 }
 const link = (href, text, cls = "") => href ? `<a class="${cls}" href="${esc(href)}"${/^https?:/.test(href) ? ' rel="noopener"' : ""}>${esc(text)}</a>` : "";
+const cardImgs = r => {
+  const files = (r.image || "").split("|").map(s => s.trim()).filter(Boolean), alts = (r.image_alt || "").split("|").map(s => s.trim());
+  if (!files.length) return "";
+  const img = (f, i, cls) => `<img class="${cls}" src="${esc(f)}" alt="${esc(alts[i] || r.title)}" loading="lazy">`;
+  if (files.length === 1) return img(files[0], 0, "card-img");
+  return `<div class="card-imgs">${img(files[0], 0, "lead")}<div class="rest">${files.slice(1).map((f, i) => img(f, i + 1, "")).join("")}</div></div>`;
+};
 const paras = t => esc(t).split(/\n+/).filter(Boolean).map(p => `<p>${p}</p>`).join("");
 
 const RENDER = {
@@ -112,7 +119,7 @@ const RENDER = {
   },
   gatherings(rows) {
     return `<div class="cards">${rows.filter(shown).map(r => `
-      <article class="card">${r.image ? `<img class="card-img" src="${esc(r.image)}" alt="${esc(r.image_alt || r.title)}" loading="lazy">` : ""}<div class="meta">${esc(r.date)} · ${esc(r.place)}</div><h3>${esc(r.title)}</h3>
+      <article class="card">${cardImgs(r)}<div class="meta">${esc(r.date)} · ${esc(r.place)}</div><h3>${esc(r.title)}</h3>
       ${r.summary ? paras(r.summary) : ""}${link(r.page, r.page_text || "Read more", "more")}</article>`).join("")}</div>`;
   },
   updates(rows) {

@@ -331,3 +331,9 @@ footer.site .partners{flex-basis:100%}
 .address button{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--line);color:var(--fg);padding:6px 10px;border-radius:2px;cursor:pointer}
 @media (max-width:820px){.contact{grid-template-columns:minmax(0,1fr)}}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* gathering cards with several photographs: one leads, the rest sit beneath it */
+.card-imgs{width:calc(100% + 44px);margin:-20px -22px 12px;display:grid;gap:3px}
+.card-imgs img{display:block;width:100%;max-width:none;object-fit:cover;aspect-ratio:3/2}
+.card-imgs .lead{border-radius:4px 4px 0 0}
+.card-imgs .rest{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:3px}
