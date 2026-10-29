@@ -250,6 +250,10 @@ const AFTER = {
       if (e.key === "ArrowRight") reader.querySelector(".next")?.click();
     });
     books.forEach((b, i) => b.addEventListener("click", () => openBook(i)));
+    // open a book straight from a link, e.g. archive.html#research-retreat-montgomery
+    const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const fromHash = () => { const h = decodeURIComponent(location.hash.slice(1)); const i = h ? events.findIndex(k => slug(k) === h) : -1; if (i >= 0 && ev !== i) openBook(i); };
+    fromHash(); addEventListener("hashchange", fromHash);
     narrow.addEventListener?.("change", () => { if (ev >= 0) renderReader(); });
   }
 };
